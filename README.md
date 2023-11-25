@@ -102,7 +102,10 @@ Whole project is based on Python and Postgres database.
 </center>
 
 * **PostgreSQL**
-  * e.g. running as *Docker container* - for this project the official image (provided by Docker) was chosen
+  * e.g. running as *Docker container* - for this project [the official image](https://hub.docker.com/_/postgres) (provided by Docker) was chosen:
+
+    [![postgres][Postgres-badge]][Postgres-docker-url] [![postgres-image-tag][Postgres-tag-badge]][Postgres-tag-url]
+
 
 ### Installation
 
@@ -168,3 +171,11 @@ No license chosen at the time of creating this repository!
 [HTML]: 	https://img.shields.io/badge/HTML-239120?style=for-the-badge&logo=html5&logoColor=white
 [CSS]: https://img.shields.io/badge/CSS-239120?&style=for-the-badge&logo=css3&logoColor=white
 [JS]: https://img.shields.io/badge/JavaScript-F7DF1E?style=for-the-badge&logo=javascript&logoColor=black
+
+<!-- BADGES -->
+
+[Postgres-badge]: https://img.shields.io/badge/image-postgres-blue
+[Postgres-docker-url]: https://hub.docker.com/_/postgres
+
+[Postgres-tag-badge]: https://img.shields.io/badge/TAG-11.22--bullseye-green
+[Postgres-tag-url]: https://hub.docker.com/layers/library/postgres/11.22-bullseye/images/sha256-b3de7d483937f2df1106398290b35c1bc0ecc7508e2d4a2d72ae7a42c41a4b90?context=explore
