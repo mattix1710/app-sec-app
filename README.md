@@ -112,19 +112,31 @@ Whole project is based on Python and Postgres database.
 🚧🚧🚧
 > TODO: Installation description
 
+#### Dockering Postgres
+
+1. After installing [Docker Desktop](https://www.docker.com/get-started/) (e.g. on Windows) it is possible to run the app in the terminal:
+```
+docker run --name <container_name> -p 5432:5432 -e POSTGRES_PASSWORD=<password> -d <image_name>
+```
+* Where:
+   * `container_name` - chosen container name, e.g. *postgres-db*
+   * `password` - password used for logging into the server
+   * `image_name` - source image used for creation of a container, e.g. postgres:11.22-bullseye
+   * `-p` - flag used for port binding between host and working container
+* ❕If there wasn't any image locally, docker app will download necessary files
+
+2. After creating the container, the user can connect to the container via terminal:
+```
+docker exec -it <container_name> bash
+```
+
+3. In the internal terminal there is a possibility to connect to the database:
+```
+psql -h localhost -U <user_name>
+```
+* Default user is the superuser: **postgres**
+
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
-
-
-
-<!-- USAGE EXAMPLES -->
-<!-- ## Usage
-
-Use this space to show useful examples of how a project can be used. Additional screenshots, code examples and demos work well in this space. You may also link to more resources.
-
-_For more examples, please refer to the [Documentation](https://example.com)_
-
-<p align="right">(<a href="#readme-top">back to top</a>)</p> -->
-
 
 
 <!-- ROADMAP -->
