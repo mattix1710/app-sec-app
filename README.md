@@ -139,6 +139,23 @@ psql -h localhost -U <user_name>
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
 
 
+### Starting the app
+1. Run **Postgres database server**
+   1. As Docker container via Desktop app:
+      1. Proceed to `Containers` bookmark and click on `Run` button
+   2. As Docker container via terminal:
+      1. Run the following command:
+          ```
+          docker start <container_name>
+          ```
+2. Run **Flask** app
+   1. Proceed to its main folder location
+   2. Run the following command:
+        ```
+        flask --app __init__ run --debug
+        ```
+        1. `--debug` option is optional - can be used for debug purposes
+
 <!-- ROADMAP -->
 ## Roadmap
 
