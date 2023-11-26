@@ -154,7 +154,7 @@ psql -h localhost -U <user_name>
         ```
         flask --app __init__ run --debug
         ```
-        1. `--debug` option is optional - can be used for debug purposes
+        1. `--debug` option is optional - can be used for debug purposes (ALSO: allows to insert changes while running the server)
 
 <!-- ROADMAP -->
 ## Roadmap
