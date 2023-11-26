@@ -93,11 +93,12 @@ Whole project is based on Python and Postgres database.
 
 <center>
 
-| Library | Version |
-|---------|---------|
-| Python  | 3.12    |
-| Flask   | 3.0.0   |
-| psycopg | 3.1.13  |
+| Library          | Version |
+|------------------|---------|
+| Python           | 3.12    |
+| Flask            | 3.0.0   |
+| psycopg          | 3.1.13  |
+| Flask-SQLAlchemy | 3.1.1   |
 
 </center>
 
@@ -165,6 +166,9 @@ psql -h localhost -U <user_name>
 - [ ] Create users profile site
     - [ ] Add view of gave blood status
     - [ ] Add view for local blood giving actions
+- [ ] Connect to Postgres database
+  - [x] Create SQL Alchemy connection
+  - [ ] Create database models
 
 
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
