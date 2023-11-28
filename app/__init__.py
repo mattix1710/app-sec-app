@@ -1,6 +1,7 @@
 from flask import Flask
 from flask_sqlalchemy import SQLAlchemy
 from flask_session import Session
+from flask_bootstrap import Bootstrap
 
 db = SQLAlchemy()
 # session = Session()
@@ -26,6 +27,8 @@ def create_app():
 
     # initializing database in the app
     db.init_app(app)
+    
+    Bootstrap(app)
     
     # initialize session in the app
     # session.init_app(app)
