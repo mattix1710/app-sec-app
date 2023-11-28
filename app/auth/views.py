@@ -46,7 +46,7 @@ def register():
         
 @auth.route('/registered')
 def register_done():
-    return render_template('auth/registered.html')
+    return render_template('auth/register_success.html')
 
 '''
 from flask_wtf import FlaskForm
@@ -85,8 +85,8 @@ def login():
             # if not sane:
             #    return render_template('login.html', error=True)
             check_user(sane, request.form['password'])
-            return render_template('success.html')
+            return render_template('auth/login_success.html')
             # TODO add redirect to user page
             #return redirect(url_for('main.home'))
         except:
-            return render_template('login.html', error=True)
+            return render_template('auth/login.html', error=True)
