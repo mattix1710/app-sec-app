@@ -3,7 +3,7 @@ from flask_sqlalchemy import SQLAlchemy
 
 db = SQLAlchemy()
 
-DB_USER = 'postgres'
+DB_USER = 'appsec'
 DB_PASS = 'superduperpass'
 
 DB_CONN = 'localhost:5432'

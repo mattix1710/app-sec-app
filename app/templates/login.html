@@ -1,0 +1,14 @@
+{% extends 'base.html' %}
+
+{% block content %}
+    <h1>{% block title %} Log In {% endblock %}</h1>
+    <form method="POST">
+        <p style="color:red;" {{ "hidden" if not error }}>Wrong username/password</p>
+        <label for="username">Username</label>
+        <input type="text" placeholder="Username..." name="username" required><br>
+        <label for="password">Password</label>
+        <input type="password" name="password" required><br>
+        <input type="submit" value="Log in"/>
+    </form>
+
+{% endblock %}
