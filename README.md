@@ -93,12 +93,18 @@ Whole project is based on Python and Postgres database.
 
 <center>
 
-| Library          | Version |
-|------------------|---------|
-| Python           | 3.12    |
-| Flask            | 3.0.0   |
-| psycopg          | 3.1.13  |
-| Flask-SQLAlchemy | 3.1.1   |
+| Library              | Version       |
+|----------------------|---------------|
+| Python               | 3.12          |
+| Flask                | 3.0.0         |
+| psycopg              | 3.1.13        |
+| psycopg[binary,pool] | 3.1.13, 3.2.0 |
+| Flask-SQLAlchemy     | 3.1.1         |
+| Flask-Session        | 0.5.0         |
+| Flask-Bootstrap      | 3.3.7.1       |
+| Flask-WTF            | 1.2.1         |
+| email-validator      | 2.1.0.post1   |
+| bcrypt               | 4.0.1         |
 
 </center>
 
