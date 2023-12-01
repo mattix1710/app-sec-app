@@ -9,6 +9,15 @@ from .forms import RegistrationForm
 from ..models import User
 from .. import db
 
+class TooManyUsersError(Exception):
+    # Raise this when database query gets 0 or more users when
+    # it's supposed to get only one
+    pass
+
+class InvalidPassHashError(Exception):
+    # Raise this if password hash does not match
+    pass
+
 def hash_the_pass(passwd):
     passwd = passwd.encode("utf-8")
     salt = bcrypt.gensalt()
@@ -57,17 +66,19 @@ from wtforms import ValidationError
 
 def sanitise(input):
     tst = re.findall('^[A-Za-z]\\w*$', input)
-    # tst = None if len(tst) <= 0 else tst[0]
     return tst[0]
 
 def check_user(username, password):
     pswd = password.encode('utf-8')
     entry = db.session.query(User).filter(User.username == username)
+
     if entry.count() > 1 or entry.count() <= 0:
-        raise IndexError
+        raise TooManyUsersError
     hashed = entry[0].password.strip().encode('utf-8')
     if not bcrypt.checkpw(pswd, hashed):
-        raise InterruptedError
+        raise InvalidPassHashError
+    
+    # TODO Session biscuit
     cookie = "ahahahah"
     return cookie
 
@@ -78,12 +89,10 @@ def index():
 @auth.route('/login', methods=['GET','POST'])
 def login():
     if request.method == 'GET':
-        return render_template('login.html')
+        return render_template('auth/login.html')
     elif request.method == 'POST':
         try:
             sane = sanitise(request.form['username'])
-            # if not sane:
-            #    return render_template('login.html', error=True)
             check_user(sane, request.form['password'])
             return render_template('auth/login_success.html')
             # TODO add redirect to user page
