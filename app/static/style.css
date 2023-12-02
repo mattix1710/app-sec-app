@@ -1,7 +1,12 @@
+nav {
+    margin-left: 2em;
+    display: flex;
+    gap: 3em;
+}
+
 nav a {
     color: #d64161;
-    font-size: 3em;
-    margin-left: 50px;
+    font-size: 2em;
     text-decoration: none;
 }
 
