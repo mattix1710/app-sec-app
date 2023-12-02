@@ -9,7 +9,7 @@ class RegistrationForm(FlaskForm):
     email = StringField('e-mail', validators=[DataRequired(), Length(1, 100), Email()])
     
     # TODO: add REGEX to username
-    username = StringField('Username', validators=[DataRequired(), Length(1, 50)])
+    username = StringField('Username', validators=[DataRequired(), Length(1, 50), Regexp('^[A-Za-z]\\w*$')])
     
     password = PasswordField('Password', validators=[DataRequired(), EqualTo('password2', message='Passwords must match.')])
     password2 = PasswordField('Confirm password', validators=[DataRequired()])
