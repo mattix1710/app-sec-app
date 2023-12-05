@@ -5,18 +5,9 @@ import re
 
 from . import auth
 
-from .forms import RegistrationForm
+from .forms import RegistrationForm, LoginForm
 from ..models import User
 from .. import db
-
-class TooManyUsersError(Exception):
-    # Raise this when database query gets 0 or more users when
-    # it's supposed to get only one
-    pass
-
-class InvalidPassHashError(Exception):
-    # Raise this if password hash does not match
-    pass
 
 def hash_the_pass(passwd):
     passwd = passwd.encode("utf-8")
@@ -25,6 +16,10 @@ def hash_the_pass(passwd):
     
     # returning the hash in decoded version from bytes to string
     return hashed_pw.decode('utf-8')
+
+@auth.route('/')
+def index():
+    return redirect(url_for('auth.register'))
 
 @auth.route('/register', methods=['GET', 'POST'])
 def register():
@@ -57,17 +52,6 @@ def register():
 def register_done():
     return render_template('auth/register_success.html')
 
-'''
-from flask_wtf import FlaskForm
-from wtforms import StringField, PasswordField, BooleanField, SubmitField
-from wtforms.validators import DataRequired, Length, Email, Regexp, EqualTo
-from wtforms import ValidationError
-'''
-
-def sanitise(input):
-    tst = re.findall('^[A-Za-z]\\w*$', input)
-    return tst[0]
-
 def check_user(username, password):
     pswd = password.encode('utf-8')
     entry = db.session.query(User).filter(User.username == username)
@@ -82,20 +66,15 @@ def check_user(username, password):
     cookie = "ahahahah"
     return cookie
 
-@auth.route('/')
-def index():
-    return redirect(url_for('auth.register'))
-
 @auth.route('/login', methods=['GET','POST'])
 def login():
-    if request.method == 'GET':
-        return render_template('auth/login.html')
-    elif request.method == 'POST':
-        try:
-            sane = sanitise(request.form['username'])
-            check_user(sane, request.form['password'])
-            return render_template('auth/login_success.html')
-            # TODO add redirect to user page
-            #return redirect(url_for('main.home'))
-        except:
-            return render_template('auth/login.html', error=True)
+    form = LoginForm()
+
+    if form.validate_on_submit():
+        # TODO set session token
+
+        return render_template('auth/login_success.html')
+        # TODO add redirect to user page
+        #return redirect(url_for('main.home'))
+
+    return render_template('auth/login.html', form=form)
