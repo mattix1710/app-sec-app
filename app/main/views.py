@@ -5,6 +5,8 @@ from . import main
 from .. import db
 from ..models import Photo, User, Session
 
+from ..auth.helpers import check_session
+
 @main.route('/')
 def home():
     
@@ -55,15 +57,3 @@ def my_profile():
     if request.form:
         print("SOMETHING CHANGED")
     return render_template('profile.html', session_id = sess)
-
-
-# route created ONLY for testing purposes
-# TODO: delete before finishing the project
-@main.route('/photos')
-def photo_display():
-    photos = db.session.query(Photo).all()
-    print(photos[0].name)
-    return render_template('photos.html', photos=photos)
-
-def test_data():
-    print("TEST_DATA")

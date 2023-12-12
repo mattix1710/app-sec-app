@@ -1,5 +1,4 @@
 from flask import Flask, session, redirect, url_for, request, render_template
-import bcrypt
 import cgi
 import re
 
@@ -9,13 +8,7 @@ from .forms import RegistrationForm, LoginForm
 from ..models import User, Session
 from .. import db
 
-def hash_the_pass(passwd):
-    passwd = passwd.encode("utf-8")
-    salt = bcrypt.gensalt()
-    hashed_pw = bcrypt.hashpw(passwd, salt)
-    
-    # returning the hash in decoded version from bytes to string
-    return hashed_pw.decode('utf-8')
+from .helpers import hash_the_pass
 
 @auth.route('/')
 def index():
@@ -56,20 +49,6 @@ def register():
 @auth.route('/registered')
 def register_done():
     return render_template('auth/register_success.html')
-
-def check_user(username, password):
-    pswd = password.encode('utf-8')
-    entry = db.session.query(User).filter(User.username == username)
-
-    if entry.count() > 1 or entry.count() <= 0:
-        raise TooManyUsersError
-    hashed = entry[0].password.strip().encode('utf-8')
-    if not bcrypt.checkpw(pswd, hashed):
-        raise InvalidPassHashError
-    
-    # TODO Session biscuit
-    cookie = "ahahahah"
-    return cookie
 
 @auth.route('/login', methods=['GET','POST'])
 def login():
