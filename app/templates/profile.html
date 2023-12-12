@@ -1,0 +1,21 @@
+{% extends 'base.html' %}
+
+{% block title %} My profile {% endblock %}
+
+{% block content %}
+<h1><s>Cookie</s> Biscuit checker</h1>
+<a href="{{ url_for('main.home', code=302) }}"><button>Home</button></a>
+
+    <form>
+        <button type="submit">Click me!</button>
+    </form>
+
+    <p>{{ session_id }}</p>
+
+    {% if session['user_mail'] %}
+        <p>Your e-mail is: <text style="color: red">{{ session['user_mail'] }}</text></p>
+    {% else %}
+        <p>Please login or register.
+    {% endif %}
+
+{% endblock %}

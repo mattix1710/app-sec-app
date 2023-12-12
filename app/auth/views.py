@@ -6,7 +6,7 @@ import re
 from . import auth
 
 from .forms import RegistrationForm, LoginForm
-from ..models import User
+from ..models import User, Session
 from .. import db
 
 def hash_the_pass(passwd):
@@ -36,8 +36,12 @@ def register():
                     is_admin = False)
         
         db.session.add(user)
+        
+        db.session.add(Session(uid = User.query.where(User.email == form.email.data.lower()).scalar().id))
+        
         db.session.commit()
         
+        session['session'] = Session.query.where(Session.uid == User.query.where(User.email == form.email.data.lower()).scalar().id).order_by(Session.timestamp).limit(1).scalar()
         
         ''' cannot use after adding to database and commiting (the data is flushed from memory (?))
             AND the error occurs:
@@ -46,6 +50,7 @@ def register():
         
         return redirect(url_for('auth.register_done'))
     
+    # TODO: go to /my_profile
     return render_template('auth/register.html', form=form)
         
 @auth.route('/registered')
