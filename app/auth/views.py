@@ -5,7 +5,7 @@ import re
 
 from . import auth
 
-from .forms import RegistrationForm
+from .forms import RegistrationForm, LoginForm
 from ..models import User, Session
 from .. import db
 
@@ -16,6 +16,10 @@ def hash_the_pass(passwd):
     
     # returning the hash in decoded version from bytes to string
     return hashed_pw.decode('utf-8')
+
+@auth.route('/')
+def index():
+    return redirect(url_for('auth.register'))
 
 @auth.route('/register', methods=['GET', 'POST'])
 def register():
@@ -53,45 +57,29 @@ def register():
 def register_done():
     return render_template('auth/register_success.html')
 
-'''
-from flask_wtf import FlaskForm
-from wtforms import StringField, PasswordField, BooleanField, SubmitField
-from wtforms.validators import DataRequired, Length, Email, Regexp, EqualTo
-from wtforms import ValidationError
-'''
-
-def sanitise(input):
-    tst = re.findall('^[A-Za-z]\\w*$', input)
-    # tst = None if len(tst) <= 0 else tst[0]
-    return tst[0]
-
 def check_user(username, password):
     pswd = password.encode('utf-8')
     entry = db.session.query(User).filter(User.username == username)
+
     if entry.count() > 1 or entry.count() <= 0:
-        raise IndexError
+        raise TooManyUsersError
     hashed = entry[0].password.strip().encode('utf-8')
     if not bcrypt.checkpw(pswd, hashed):
-        raise InterruptedError
+        raise InvalidPassHashError
+    
+    # TODO Session biscuit
     cookie = "ahahahah"
     return cookie
 
-@auth.route('/')
-def index():
-    return redirect(url_for('auth.register'))
-
 @auth.route('/login', methods=['GET','POST'])
 def login():
-    if request.method == 'GET':
-        return render_template('auth/login.html')
-    elif request.method == 'POST':
-        try:
-            sane = sanitise(request.form['username'])
-            # if not sane:
-            #    return render_template('login.html', error=True)
-            check_user(sane, request.form['password'])
-            return render_template('auth/login_success.html')
-            # TODO add redirect to user page
-            #return redirect(url_for('main.home'))
-        except:
-            return render_template('auth/login.html', error=True)
+    form = LoginForm()
+
+    if form.validate_on_submit():
+        # TODO set session token
+
+        return render_template('auth/login_success.html')
+        # TODO add redirect to user page
+        #return redirect(url_for('main.home'))
+
+    return render_template('auth/login.html', form=form)
