@@ -5,12 +5,12 @@ from . import main
 from .. import db
 from ..models import Photo, User, Session
 
-from ..auth.helpers import check_session
+from ..auth.helpers import server_set_session, server_check_session, SESSION_NAME
 
 @main.route('/')
 def home():
     
-    session['my_data'] = "Hello you!"
+    # session['my_data'] = "Hello you!"
     
     if 'code' in request.args:
         print(request.args['code'])
@@ -23,37 +23,9 @@ def home():
 
 @main.route('/my_profile', methods=['GET', '[POST]'])
 def my_profile():
-    # check if session exists - if yes, list user data
-    # SQL:
-    #   SELECT * FROM users WHERE id = (SELECT uid FROM sessions WHERE id = 'FFA582B309ACD115');
-    # session_uid = db.session.query(Session.uid).filter(Session.id == 'FFA582B309ACD115').scalar()
-    
-    # user = db.session.query(User).filter(User.id == session_uid).all()
-    
-    # session_time = db.session.query(Session.timestamp).where(Session.id == 'FFA582B309ACD115').scalar()
-    
-    # print(User.query.where(User.username == 'mattix').scalar().email)
-    
-    # INFO: creating new user and adding new session
-    user = User(
-        email = "super@email.com",
-        username = "user_buster",
-        password = "hush_hush_baby",
-        is_active = True)
-    
-    db.session.add(user)
-    db.session.add(Session(uid = User.query.where(User.email == "super@email.com").scalar().id))
-        
-    db.session.commit()
-    
-    sess = Session.query.where(Session.uid == User.query.where(User.email == "super@email.com").scalar().id).scalar().id
-    
-    # datetime.now()
-    # ss_time = datetime.strptime(session_time, )
-    # timedelta(0, 7200)
-    # print(session_time + timedelta(0, 7200))
-    
-    
-    if request.form:
-        print("SOMETHING CHANGED")
-    return render_template('profile.html', session_id = sess)
+    # if user is logged in - show its profile data
+    if server_check_session():        
+        user = User.query.where(User.id == Session.query.where(Session.id == session[SESSION_NAME]['id']).scalar().uid).scalar()      
+        return render_template('profile.html', user = user)
+    # otherwise - redirect to login page
+    return redirect(url_for('auth.login'))
