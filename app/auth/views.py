@@ -8,7 +8,7 @@ from .forms import RegistrationForm, LoginForm
 from ..models import User, Session
 from .. import db
 
-from .helpers import hash_the_pass, server_check_session, server_set_session
+from .helpers import hash_the_pass, server_check_session, server_set_session, SESSION_NAME
 
 @auth.route('/')
 def index():
@@ -54,3 +54,13 @@ def login():
         return redirect(url_for('main.my_profile'))
         # return render_template('auth/login_success.html')
     return render_template('auth/login.html', form=form)
+
+@auth.route('/logout', methods=['POST'])
+def logout():
+    # pop the session data from cookie
+    if SESSION_NAME in session:
+        session.pop(SESSION_NAME)
+    
+    # DEBUG
+    print("DEBUG: session cookie deleted")
+    return redirect(url_for('main.home'))
