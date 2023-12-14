@@ -10,12 +10,11 @@
         <button type="submit">Click me!</button>
     </form>
 
-    <p>{{ session_id }}</p>
+    <h1>Hello {{ user.username }}!</h1>
 
-    {% if session['user_mail'] %}
-        <p>Your e-mail is: <text style="color: red">{{ session['user_mail'] }}</text></p>
-    {% else %}
-        <p>Please login or register.
-    {% endif %}
+    <p>Your data:</p>
+    <ul>
+        <li>{{ user.email }}</li>
+    </ul>
 
 {% endblock %}

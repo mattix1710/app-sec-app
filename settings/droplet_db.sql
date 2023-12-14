@@ -29,8 +29,6 @@ CREATE TABLE "user_giving_dates"(
 
 CREATE TABLE "sessions"(
     "id" uuid DEFAULT uuid_generate_v4() PRIMARY KEY,
-    "uid" SERIAL REFERENCES users(id) NOT NULL,
+    "uid" SERIAL REFERENCES users(id) ON DELETE CASCADE,
     "timestamp" TIMESTAMP NOT NULL DEFAULT NOW()
 );
-
-
