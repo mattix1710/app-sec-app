@@ -3,23 +3,13 @@ from datetime import datetime, timedelta
 from . import main
 
 from .. import db
-from ..models import Photo, User, Session
+from ..models import User, Session
 
 from ..auth.helpers import server_set_session, server_check_session, SESSION_NAME
 
 @main.route('/')
 def home():
-    
-    # session['my_data'] = "Hello you!"
-    
-    if 'code' in request.args:
-        print(request.args['code'])
-    # return render_template("")
-    
-    user_agent_data = request.headers.get('User-Agent')
-    my_ip = request.headers
-    
-    return "<h1>Main page</h1><p>{UA}</p><p>{IP}</ip>".format(UA=user_agent_data, IP=my_ip)    # return a string
+    return render_template('main.html')
 
 @main.route('/my_profile', methods=['GET', '[POST]'])
 def my_profile():
