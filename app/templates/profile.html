@@ -1,0 +1,20 @@
+{% extends 'base.html' %}
+
+{% block title %} My profile {% endblock %}
+
+{% block content %}
+<h1><s>Cookie</s> Biscuit checker</h1>
+<a href="{{ url_for('main.home', code=302) }}"><button>Home</button></a>
+
+    <form>
+        <button type="submit">Click me!</button>
+    </form>
+
+    <h1>Hello {{ user.username }}!</h1>
+
+    <p>Your data:</p>
+    <ul>
+        <li>{{ user.email }}</li>
+    </ul>
+
+{% endblock %}
