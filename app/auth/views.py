@@ -4,11 +4,11 @@ import re
 
 from . import auth
 
-from .forms import RegistrationForm, LoginForm
+from .forms import RegistrationForm, LoginForm, ForgotPasswordForm
 from ..models import User, Session
 from .. import db
 
-from .helpers import hash_the_pass, server_check_session, server_set_session
+from .helpers import hash_the_pass, server_check_session, server_set_session, send_password_reset_email
 
 @auth.route('/')
 def index():
@@ -54,3 +54,17 @@ def login():
         return redirect(url_for('main.my_profile'))
         # return render_template('auth/login_success.html')
     return render_template('auth/login.html', form=form)
+
+@auth.route('/forgot-password', methods=['GET', 'POST'])
+def forgot_password():
+    if server_check_session():
+        return redirect(url_for('main.my_profile'))
+    
+    form = ForgotPasswordForm()
+
+    if form.validate_on_submit():
+        print(form.email.data)
+        send_password_reset_email(form.email.data)
+        return render_template("auth/reset_email_sent.html")
+
+    return render_template("auth/forgot_password.html", form=form)

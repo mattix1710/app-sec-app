@@ -1,10 +1,12 @@
 from flask import session
+from flask_mail import Message
 import bcrypt
 from datetime import datetime, timedelta
 import functools
 
 from ..models import User, Session
 from .. import db
+from .. import mail
 
 def hash_the_pass(passwd):
     passwd = passwd.encode("utf-8")
@@ -95,3 +97,15 @@ def server_set_session(login):
         "timestamp": new_session.timestamp.timestamp(),
         "token": bcrypt.hashpw(token, salt)
     }
+
+def send_password_reset_email(email):
+    entry = User.query.filter_by(email=email)
+    if entry.count() == 1:
+        # Send email
+        msg = Message(subject='You requested a passowrd reset', sender='a.dam.krew@hotmail.com', recipients=[entry[0].email])
+        msg.html = "Hi there,\nyou requested a password reset for you Kropelka Account.</br>Please follow this link to reset your password <a href='www.google.com'>reset passowrd</a>."
+        msg.html += "</br>If you did not request a password reset, please change you password as soon as possible."
+        print('sending message...')
+        mail.send(msg)
+        print('yes')
+    print('no')

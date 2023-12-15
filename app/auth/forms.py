@@ -41,3 +41,9 @@ class LoginForm(FlaskForm):
         hashed = entry[0].password.strip().encode('utf-8')
         if not bcrypt.checkpw(pswd, hashed):
             raise ValidationError('Wrong Username/Password')
+
+
+class ForgotPasswordForm(FlaskForm):
+    email = StringField('e-mail', validators=[DataRequired(), Length(1, 100), Email()])
+
+    submit = SubmitField('Forgot Passowrd')
