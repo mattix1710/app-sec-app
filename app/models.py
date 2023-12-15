@@ -26,3 +26,13 @@ class Session(db.Model):
     timestamp = db.Column(db.DateTime, nullable=False, server_default=db.FetchedValue())
 
     user = db.relationship('User', primaryjoin='Session.uid == User.id', backref='sessions')
+    
+class PassResetSession(db.Model):
+    __tablename__ = 'pass_reset_session'
+
+    id = db.Column(db.Integer, primary_key=True, server_default=db.FetchedValue())
+    uid = db.Column(db.ForeignKey('users.id', ondelete='CASCADE'), nullable=False, server_default=db.FetchedValue())
+    token = db.Column(db.String(50), nullable=False)
+    timestamp = db.Column(db.DateTime, nullable=False)
+
+    user = db.relationship('User', primaryjoin='PassResetSession.uid == User.id', backref='pass_reset_sessions')
