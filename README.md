@@ -103,8 +103,10 @@ Whole project is based on Python and Postgres database.
 | Flask-Session        | 0.5.0         |
 | Flask-Bootstrap      | 3.3.7.1       |
 | Flask-WTF            | 1.2.1         |
+| Flask-Mail           | 0.9.1         |
 | email-validator      | 2.1.0.post1   |
 | bcrypt               | 4.0.1         |
+| pycryptodome         | 3.19.0        |
 
 </center>
 
