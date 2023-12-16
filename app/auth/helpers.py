@@ -3,6 +3,8 @@ from flask_mail import Message
 import bcrypt
 from datetime import datetime, timedelta
 import functools
+from Crypto import Random
+import base64
 
 from ..models import User, Session
 from .. import db
@@ -102,10 +104,20 @@ def send_password_reset_email(email):
     entry = User.query.filter_by(email=email)
     if entry.count() == 1:
         # Send email
-        msg = Message(subject='You requested a passowrd reset', sender='a.dam.krew@hotmail.com', recipients=[entry[0].email])
-        msg.html = "Hi there,\nyou requested a password reset for you Kropelka Account.</br>Please follow this link to reset your password <a href='www.google.com'>reset passowrd</a>."
-        msg.html += "</br>If you did not request a password reset, please change you password as soon as possible."
-        print('sending message...')
+        msg = Message(subject='You requested a password reset', sender='a.dam.krew@hotmail.com', recipients=[entry[0].email])
+        msg.html = "Hi there,\nyou requested a password reset for you Kropelka Account.</br>Please follow this link to reset your password <a href='www.google.com'>reset password</a>."
+        msg.html += "</br>If you did not request a password reset, please change your password as soon as possible!"
+        # DEBUG
+        print('DEBUG: password-reset: sending message...')
         mail.send(msg)
-        print('yes')
+        # DEBUG
+        print('DEBUG: password-reset message sent')
     print('no')
+    
+def generate_reset_token(in_bytes = False):
+    rand_bytes = Random.get_random_bytes(50)
+    bytes_base = base64.urlsafe_b64encode(rand_bytes)
+    
+    if in_bytes:
+        return bytes_base[:50]
+    return bytes_base[:50].decode('utf-8')

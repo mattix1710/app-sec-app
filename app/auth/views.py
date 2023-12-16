@@ -70,6 +70,10 @@ def forgot_password():
     if server_check_session():
         return redirect(url_for('main.my_profile'))
     
+    # TODO: receiving password-reset token and handling it
+    # check if token valid -    if invalid: display ERROR message
+    #                           if valid: display forgot password form
+    
     form = ForgotPasswordForm()
 
     if form.validate_on_submit():
