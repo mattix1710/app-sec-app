@@ -1,14 +1,16 @@
-from flask import session
+from flask import session, url_for
 from flask_mail import Message
+from sqlalchemy import exc
 import bcrypt
 from datetime import datetime, timedelta
 import functools
 from Crypto import Random
 import base64
+import os
 
 from ..models import User, Session
 from .. import db
-from .. import mail
+from .. import mail_service
 
 def hash_the_pass(passwd):
     passwd = passwd.encode("utf-8")
@@ -100,19 +102,24 @@ def server_set_session(login):
         "token": bcrypt.hashpw(token, salt)
     }
 
-def send_password_reset_email(email):
-    entry = User.query.filter_by(email=email)
-    if entry.count() == 1:
-        # Send email
-        msg = Message(subject='You requested a password reset', sender='a.dam.krew@hotmail.com', recipients=[entry[0].email])
-        msg.html = "Hi there,\nyou requested a password reset for you Kropelka Account.</br>Please follow this link to reset your password <a href='www.google.com'>reset password</a>."
-        msg.html += "</br>If you did not request a password reset, please change your password as soon as possible!"
-        # DEBUG
-        print('DEBUG: password-reset: sending message...')
-        mail.send(msg)
-        # DEBUG
-        print('DEBUG: password-reset message sent')
-    print('no')
+def send_password_reset_email(email, url):
+    try:
+        entry = User.query.filter_by(email=email).scalar()
+        if entry == None:
+            raise exc.NoResultFound
+        msg = Message(subject='You have requested a password reset', sender = os.environ.get('MAIL_ADDRESS'), recipients=[entry.email])
+        msg.html = "Hello fellow blood donor!</br>You have requested a password reset for your Kropelka Account."\
+            "</br>Please follow this link to reset your password: <a href='{password_reset_url}'>Click</a>."\
+            "</br>If you did not request a password reset, please change your password as soon as possible!"\
+            .format(password_reset_url = url)
+        mail_service.send(msg)
+    except exc.MultipleResultsFound:
+        print("DEBUG: e-mail not sent: Too many results!")
+    except exc.NoResultFound:
+        # INFO: for further development - if this exception occurs, it means the user typed wrong e-mail address
+        print("DEBUG: e-mail not sent: No results found!")
+    except:
+        print("DEBUG: noooooo, God please, no!")
     
 def generate_reset_token(in_bytes = False):
     rand_bytes = Random.get_random_bytes(50)

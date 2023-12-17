@@ -16,7 +16,7 @@ DB_NAME = 'droplet_db'
 
 DB_URL = 'postgresql+psycopg://{user}:{passwd}@{url}/{db}'.format(user=DB_USER, passwd=DB_PASS, url=DB_CONN, db=DB_NAME)
 
-mail = Mail()
+mail_service = Mail()
 
 def create_app():
     app = Flask(__name__)
@@ -41,13 +41,13 @@ def create_app():
     db.init_app(app)
 
     # Initialize mail server
-    app.config['MAIL_SERVER'] = 'smtp.office365.com'
-    app.config['MAIL_PORT'] = 587#465
-    app.config['MAIL_USERNAME'] = os.environ.get('MAIL_USERNAME')
+    app.config['MAIL_SERVER'] = os.environ.get('MAIL_SERVER')
+    app.config['MAIL_PORT'] = os.environ.get('MAIL_PORT')
+    app.config['MAIL_USERNAME'] = os.environ.get('MAIL_ADDRESS')
     app.config['MAIL_PASSWORD'] = os.environ.get('MAIL_PASSWORD')
     app.config['MAIL_USE_TLS'] = True
     app.config['MAIL_USE_SSL'] = False
-    mail.init_app(app)
+    mail_service.init_app(app)
     
     Bootstrap(app)
     
