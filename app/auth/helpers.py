@@ -23,13 +23,9 @@ def hash_the_pass(passwd):
 #############################################
 # TIME DELTA SECONDS
 DELTA_SECS = 3600
-
 SESSION_NAME = 'session_data'
-
-SESSION_TOKEN = 'save_my_bandwidth'
-
+SESSION_TOKEN = 'save_my_bandwidth'     # TODO: change and move to env variables
 TOKEN_EXPIRATION = 15*60
-
 SERVER_IP = "127.0.0.1:5000"
 
 def check_session():
@@ -113,19 +109,13 @@ def send_password_reset_email(email):
             raise exc.NoResultFound
         
         token = generate_unique_token()
-        
-        print('token generated')
-        
         # create recovery token and submit to database
         session_token = PassResetSession(
             uid = User.query.where(User.email == email).scalar().id,
             token = token,
         )
-        
         db.session.add(session_token)
         db.session.commit()
-        
-        print('session set and commited')
         
         url = "{ip}{redirect}?token={token}".format(ip=SERVER_IP, redirect = url_for('auth.set_new_password'), token = token)
         
@@ -166,7 +156,6 @@ def generate_unique_token():
         Uses generate_reset_token() method
     '''
     tokens = PassResetSession.query.all()
-    
     if_token_exists = False
     
     while(True):
@@ -175,7 +164,6 @@ def generate_unique_token():
             if el.token_matches(token):
                 if_token_exists = True
                 break
-        
         if if_token_exists:
             continue
         break
@@ -197,10 +185,7 @@ def validate_token(token):
         # if there is no such entry
         if entry == None:
             raise exc.NoResultFound
-        # if current token has already expired
-        print(entry.timestamp)
-        print(entry.timestamp + timedelta(0, TOKEN_EXPIRATION))
-        
+        # if current token has already expired        
         if datetime.now() > entry.timestamp + timedelta(0, TOKEN_EXPIRATION):
             raise ValueError
         

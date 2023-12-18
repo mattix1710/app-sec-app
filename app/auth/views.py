@@ -96,16 +96,10 @@ def set_new_password():
     if form.validate_on_submit():
         print("DEBUG: new password set")
         if request.args.get('token'):
-            print("TOKEN:", request.args.get('token'))
             user_id = validate_token(request.args.get('token'))
-            print("USER ID:", user_id)
             if user_id:
                 user_pass_update(user_id, form.password.data)
                 print("DEBUG: user data updated!")
         
         return redirect(url_for('auth.login'))
     return render_template("auth/forgot_password.html", form=form)
-    
-    # TODO: receiving password-reset token and handling it
-    # check if token valid -    if invalid: display ERROR message
-    #                           if valid: display forgot password form
