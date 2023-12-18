@@ -1,14 +1,15 @@
 from flask import Flask, session, redirect, url_for, request, render_template
 import cgi
 import re
+import os
 
 from . import auth
 
-from .forms import RegistrationForm, LoginForm, ForgotPasswordForm
+from .forms import RegistrationForm, LoginForm, ForgotPasswordForm, ResetPasswordForm
 from ..models import User, Session
 from .. import db
 
-from .helpers import hash_the_pass, server_check_session, server_set_session, SESSION_NAME, send_password_reset_email
+from .helpers import hash_the_pass, server_check_session, server_set_session, SESSION_NAME, send_password_reset_email, validate_token, user_pass_update
 
 @auth.route('/')
 def index():
@@ -71,10 +72,34 @@ def forgot_password():
         return redirect(url_for('main.my_profile'))
     
     form = ForgotPasswordForm()
+    
+    print(os.environ.get('MAIL_PORT'))
 
     if form.validate_on_submit():
-        print(form.email.data)
+        print("DEBUG: submitted mail -", form.email.data)
         send_password_reset_email(form.email.data)
+        
+        # TODO: show JS alert() and then redirect to login page
+        # return redirect(url_for('auth.login'))
+        
         return render_template("auth/reset_email_sent.html")
 
+    return render_template("auth/forgot_password.html", form=form)
+
+@auth.route('/pass-recovery', methods=['GET', 'POST'])
+def set_new_password():
+    if server_check_session():
+        return redirect(url_for('main.my_profile'))
+    
+    form = ResetPasswordForm()
+    
+    if form.validate_on_submit():
+        print("DEBUG: new password set")
+        if request.args.get('token'):
+            user_id = validate_token(request.args.get('token'))
+            if user_id:
+                user_pass_update(user_id, form.password.data)
+                print("DEBUG: user data updated!")
+        
+        return redirect(url_for('auth.login'))
     return render_template("auth/forgot_password.html", form=form)

@@ -1,12 +1,16 @@
-from flask import session
+from flask import session, url_for
 from flask_mail import Message
+from sqlalchemy import exc
 import bcrypt
 from datetime import datetime, timedelta
 import functools
+from Crypto import Random
+import base64
+import os
 
-from ..models import User, Session
+from ..models import User, Session, PassResetSession
 from .. import db
-from .. import mail
+from .. import mail_service
 
 def hash_the_pass(passwd):
     passwd = passwd.encode("utf-8")
@@ -19,10 +23,10 @@ def hash_the_pass(passwd):
 #############################################
 # TIME DELTA SECONDS
 DELTA_SECS = 3600
-
 SESSION_NAME = 'session_data'
-
-SESSION_TOKEN = 'save_my_bandwidth'
+SESSION_TOKEN = 'save_my_bandwidth'     # TODO: change and move to env variables
+TOKEN_EXPIRATION = 15*60
+SERVER_IP = "127.0.0.1:5000"
 
 def check_session():
     '''
@@ -99,13 +103,103 @@ def server_set_session(login):
     }
 
 def send_password_reset_email(email):
-    entry = User.query.filter_by(email=email)
-    if entry.count() == 1:
-        # Send email
-        msg = Message(subject='You requested a passowrd reset', sender='a.dam.krew@hotmail.com', recipients=[entry[0].email])
-        msg.html = "Hi there,\nyou requested a password reset for you Kropelka Account.</br>Please follow this link to reset your password <a href='www.google.com'>reset passowrd</a>."
-        msg.html += "</br>If you did not request a password reset, please change you password as soon as possible."
-        print('sending message...')
-        mail.send(msg)
-        print('yes')
-    print('no')
+    try:
+        entry = User.query.filter_by(email=email).scalar()
+        if entry == None:
+            raise exc.NoResultFound
+        
+        token = generate_unique_token()
+        # create recovery token and submit to database
+        session_token = PassResetSession(
+            uid = User.query.where(User.email == email).scalar().id,
+            token = token,
+        )
+        db.session.add(session_token)
+        db.session.commit()
+        
+        url = "{ip}{redirect}?token={token}".format(ip=SERVER_IP, redirect = url_for('auth.set_new_password'), token = token)
+        
+        msg = Message(subject='Password reset for your account', sender = os.environ.get('MAIL_ADDRESS'), recipients=[entry.email])
+        msg.html = "Hello fellow blood donor!</br>You have requested a password reset for your Kropelka Account.</br>"\
+            "Please follow this link to reset your password: <a href='{password_reset_url}'>Click</a>.</br>"\
+            "If you cannot click on provided link, please copy and paste this link to your browser search bar and proceed:</br>"\
+            "{password_reset_url}</br>"\
+            "This link will be active for the next {token_expiration} minutes.</br>"\
+            "If you did not request a password reset, please change your password as soon as possible!"\
+            .format(password_reset_url = url, token_expiration = int(TOKEN_EXPIRATION/60))
+        mail_service.send(msg)
+    except exc.MultipleResultsFound:
+        print("DEBUG: e-mail not sent: Too many results!")
+    except exc.NoResultFound:
+        # INFO: for further development - if this exception occurs, it means the user typed wrong e-mail address
+        print("DEBUG: e-mail not sent: No results found!")
+    except:
+        print("DEBUG: Noooooo, God please, no!")
+    
+def __generate_reset_token(in_bytes = False):
+    '''
+        Generates reset/recovery token for forgotten password functionality
+        
+        :param in_bytes: sets output format to bytes
+    '''
+    rand_bytes = Random.get_random_bytes(50)
+    bytes_base = base64.urlsafe_b64encode(rand_bytes)
+    
+    if in_bytes:
+        return bytes_base[:50]
+    return bytes_base[:50].decode('utf-8')
+
+def generate_unique_token():
+    '''
+        Generates unique reset/recovery token for forgotten password functionality
+        
+        Uses generate_reset_token() method
+    '''
+    tokens = PassResetSession.query.all()
+    if_token_exists = False
+    
+    while(True):
+        token = __generate_reset_token()
+        for el in tokens:
+            if el.token_matches(token):
+                if_token_exists = True
+                break
+        if if_token_exists:
+            continue
+        break
+    return token
+    
+
+def validate_token(token):
+    '''
+        Validates reset/recovery token integrity
+        
+        :param token: password reset token provided for the user
+        
+        RETURNS
+        * ID of a User - if matching record was found in the database
+        * None - if no matching record found
+    '''
+    try:
+        entry = PassResetSession.query.filter_by(token = token).scalar()
+        # if there is no such entry
+        if entry == None:
+            raise exc.NoResultFound
+        # if current token has already expired        
+        if datetime.now() > entry.timestamp + timedelta(0, TOKEN_EXPIRATION):
+            raise ValueError
+        
+        return entry.uid
+    except exc.NoResultFound:
+        print("DEBUG: No matching password reset token entry!")
+    except ValueError:
+        print("DEBUG: Token has already expired!")
+    except:
+        return None
+    
+def user_pass_update(id, password):
+    user = User.query.where(User.id == id).scalar()
+    pass_hash = hash_the_pass(password)
+    user.password = pass_hash
+    # db.session.add(user)
+    db.session.commit()

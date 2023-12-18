@@ -153,3 +153,4 @@ cython_debug/
 
 TEMP/
 models.py
+app/setEnv.py

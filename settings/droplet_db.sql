@@ -37,5 +37,7 @@ CREATE TABLE "pass_reset_session"(
     "id" SERIAL PRIMARY KEY,
     "uid" SERIAL REFERENCES users(id) ON DELETE CASCADE,
     "token" CHAR(50) NOT NULL,
-    "timestamp" TIMESTAMP NOT NULL
+    "timestamp" TIMESTAMP NOT NULL DEFAULT NOW(),
+
+    UNIQUE("token")
 );
