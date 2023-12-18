@@ -11,7 +11,7 @@ class RegistrationForm(FlaskForm):
     
     username = StringField('Username', validators=[DataRequired(), Length(1, 50), Regexp('^[A-Za-z]\\w*$')])
     
-    password = PasswordField('Password', validators=[DataRequired(), EqualTo('password2', message='Passwords must match.')])
+    password = PasswordField('Password', validators=[DataRequired(), Length(min=8, message="Password too short."), EqualTo('password2', message='Passwords must match.')])
     password2 = PasswordField('Confirm password', validators=[DataRequired()])
     
     submit = SubmitField('Register')
@@ -50,7 +50,7 @@ class ForgotPasswordForm(FlaskForm):
 
 
 class ResetPasswordForm(FlaskForm):
-    password = PasswordField('Password', validators=[DataRequired(), EqualTo('password2', message='Passwords must match.')])
+    password = PasswordField('Password', validators=[DataRequired(), Length(min=8, message="Password too short."), EqualTo('password2', message='Passwords must match.')])
     password2 = PasswordField('Confirm password', validators=[DataRequired()])
 
     submit = SubmitField('Change password')
