@@ -117,7 +117,7 @@ def send_password_reset_email(email):
         db.session.add(session_token)
         db.session.commit()
         
-        url = "{ip}{redirect}?token={token}".format(ip=SERVER_IP, redirect = url_for('auth.set_new_password'), token = token)
+        url = "http://{ip}{redirect}?token={token}".format(ip=SERVER_IP, redirect = url_for('auth.set_new_password'), token = token)
         
         msg = Message(subject='Password reset for your account', sender = os.environ.get('MAIL_ADDRESS'), recipients=[entry.email])
         msg.html = "Hello fellow blood donor!</br>You have requested a password reset for your Kropelka Account.</br>"\
