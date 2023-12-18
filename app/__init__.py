@@ -6,6 +6,8 @@ from flask_mail import Mail
 import os
 # from flask_sslify import SSLify
 
+from . import setEnv
+
 db = SQLAlchemy()
 
 DB_USER = 'postgres'
