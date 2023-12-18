@@ -33,6 +33,11 @@ class PassResetSession(db.Model):
     id = db.Column(db.Integer, primary_key=True, server_default=db.FetchedValue())
     uid = db.Column(db.ForeignKey('users.id', ondelete='CASCADE'), nullable=False, server_default=db.FetchedValue())
     token = db.Column(db.String(50), nullable=False, unique=True)
-    timestamp = db.Column(db.DateTime, nullable=False)
+    timestamp = db.Column(db.DateTime, nullable=False, server_default=db.FetchedValue())
 
     user = db.relationship('User', primaryjoin='PassResetSession.uid == User.id', backref='pass_reset_sessions')
+
+    def token_matches(self, new_token):
+        if self.token == new_token:
+            return True
+        return False
