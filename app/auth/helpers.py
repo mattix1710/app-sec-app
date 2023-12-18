@@ -134,8 +134,9 @@ def send_password_reset_email(email):
             "Please follow this link to reset your password: <a href='{password_reset_url}'>Click</a>.</br>"\
             "If you cannot click on provided link, please copy and paste this link to your browser search bar and proceed:</br>"\
             "{password_reset_url}</br>"\
+            "This link will be active for the next {token_expiration} minutes.</br>"\
             "If you did not request a password reset, please change your password as soon as possible!"\
-            .format(password_reset_url = url)
+            .format(password_reset_url = url, token_expiration = int(TOKEN_EXPIRATION/60))
         mail_service.send(msg)
     except exc.MultipleResultsFound:
         print("DEBUG: e-mail not sent: Too many results!")
