@@ -4,8 +4,16 @@
 
 {% block content %}
 
-<div>
-    <img src="../static/little_blood.png" alt="droplet" style="margin-left: auto; margin-right: auto; width: 150px;">
+<h1>Main page</h1>
+
+<div class="center-content">
+    <div class="img_view">
+        <img src="../static/little_blood.png" alt="droplet" style="width: 150px;">
+    </div>
 </div>
+
+{% if request.args.get('token') %}
+    <script>alert("That's it!")</script>
+{% endif %}
 
 {% endblock %}

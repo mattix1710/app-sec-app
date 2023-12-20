@@ -3,18 +3,17 @@
 {% block title %} My profile {% endblock %}
 
 {% block content %}
-<h1><s>Cookie</s> Biscuit checker</h1>
-<a href="{{ url_for('main.home', code=302) }}"><button>Home</button></a>
 
-    <form>
-        <button type="submit">Click me!</button>
-    </form>
+<div class="center-content">
+    <div class="profile-view">
+        <h1>Hello {{ user.username }}!</h1>
 
-    <h1>Hello {{ user.username }}!</h1>
+        <h2 style="text-align: center;">Your data</h2>
 
-    <p>Your data:</p>
-    <ul>
-        <li>{{ user.email }}</li>
-    </ul>
+        <div class="profile-tile">
+            <div class="profile-tile-info">e-mail</div><div class="profile-tile-data">{{ user.email }}</div>
+        </div>
+    </div>
+</div>
 
 {% endblock %}

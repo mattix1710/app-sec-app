@@ -7,8 +7,9 @@
     <div>
         {{ wtf.quick_form(form) }}
     </div>
-    <div class="form">
-        If you forgot the password try: <a href="{{ url_for('auth.forgot_password') }}">Forgot-password</a>
+    <div class="tile">
+        Can't remember the password?
+        <a class="btn-reset" href="{{ url_for('auth.forgot_password') }}">Reset password</a>
     </div>
 
 {% endblock %}
