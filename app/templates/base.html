@@ -12,8 +12,9 @@
             <div class="nav-left">
                 <nav>
                     <a href="{{ url_for('main.home') }}">Home</a>
+                    {% if user_session %}
                     <a href="{{ url_for('main.my_profile')}}">My Profile</a>
-                    {% if not user_session %}
+                    {% else %}
                     <a href="{{ url_for('auth.register') }}">Register</a>
                     <a href="{{ url_for('auth.login') }}">Log in</a>
                     {% endif %}
