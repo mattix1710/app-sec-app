@@ -19,3 +19,7 @@ def my_profile():
         return render_template('profile.html', user = user, user_session=True)
     # otherwise - redirect to login page
     return redirect(url_for('auth.login'))
+
+@main.route('/admin_tools/admin_panel')
+def admin_panel():
+    return "<h1>Hello, you are in ADMIN PANEL!</h1>"

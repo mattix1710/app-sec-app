@@ -9,7 +9,7 @@ from .forms import RegistrationForm, LoginForm, ForgotPasswordForm, ResetPasswor
 from ..models import User, Session
 from .. import db
 
-from .helpers import hash_the_pass, server_check_session, server_set_session, SESSION_NAME, send_password_reset_email, validate_token, user_pass_update
+from .helpers import hash_the_pass, server_check_session, server_set_session, SESSION_NAME, send_password_reset_email, validate_token, user_pass_update, check_admin_session
 
 @auth.route('/')
 def index():
@@ -103,3 +103,19 @@ def set_new_password():
         
         return redirect(url_for('auth.login'))
     return render_template("auth/forgot_password.html", form=form)
+
+######################################################################
+#================================ ADMIN =============================#
+######################################################################
+# ADMIN login
+@auth.route('/admin_login', methods=['GET', 'POST'])
+def admin_login():
+    if check_admin_session():
+        return redirect(url_for('main.admin_panel'))
+    
+    form = LoginForm()
+    
+    if form.validate_on_submit():
+        server_set_session(form.username.data)
+        return redirect(url_for('main.admin_panel'))
+    return render_template('auth/login.html', form=form)
