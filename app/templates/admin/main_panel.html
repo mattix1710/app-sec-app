@@ -1,0 +1,35 @@
+{% extends 'base.html' %}
+
+{% block title %} My profile {% endblock %}
+
+{% block content %}
+
+<div class="center-content">
+    <div class="profile-view">
+        <h1>Hello {{ user.username }}!</h1>
+
+        <h2 style="text-align: center;">Your data</h2>
+        <div class="profile-tile">
+            <div class="profile-tile-info">e-mail</div><div class="profile-tile-data">{{ user.email }}</div>
+        </div>
+        {% if table %}
+        <table class="table_admin">
+            <tr>
+                {% for header in table[0].get_headers() %}
+                <th>{{ header }}</th>
+                {% endfor %}
+            </tr>
+            {% for record in table %}
+            <tr>
+                <td>{{ record.id }}</td>
+                <td>{{ record.uid }}</td>
+                <td>{{ record.token }}</td>
+                <td>{{ record.timestamp }}</td>
+            </tr>
+            {% endfor %}
+        </table>
+        {% endif %}
+    </div>
+</div>
+
+{% endblock %}

@@ -41,3 +41,6 @@ class PassResetSession(db.Model):
         if self.token == new_token:
             return True
         return False
+    
+    def get_headers(self):
+        return ['id', 'uid', 'token', 'timestamp']
