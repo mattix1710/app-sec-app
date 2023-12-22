@@ -111,8 +111,8 @@ def check_admin_session():
         * False - if session either doesn't exist, expired or user NOT admin
     '''
     try:
-        if check_session():
-            user = User.query.where(User.id == Session.query.where(Session.id == session[SESSION_NAME]).scalar().uid).scalar()
+        if server_check_session():
+            user = User.query.where(User.id == Session.query.where(Session.id == session[SESSION_NAME]['id']).scalar().uid).scalar()
             if user.is_admin:
                 return True
         return False
