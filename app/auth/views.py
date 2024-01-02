@@ -77,7 +77,8 @@ def forgot_password():
 
     if form.validate_on_submit():
         print("DEBUG: submitted mail -", form.email.data)
-        send_password_reset_email(form.email.data)
+        # INFO: using Celerys concurrency feature for unloading longer/heavy processes onto background tasks
+        send_password_reset_email.delay(form.email.data)
         
         # TODO: show JS alert() and then redirect to login page
         # return redirect(url_for('auth.login'))
