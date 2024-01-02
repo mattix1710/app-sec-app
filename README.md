@@ -73,6 +73,8 @@
 * ![HTML]
 * ![CSS]
 * ![JS]
+* [![Celery][Celery]][Celery-url]
+* [![Redis][Redis.io]][Redis-url]
 
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
 
@@ -107,6 +109,9 @@ Whole project is based on Python and Postgres database.
 | email-validator      | 2.1.0.post1   |
 | bcrypt               | 4.0.1         |
 | pycryptodome         | 3.19.0        |
+| celery               | 5.3.6         |
+| gevent               | 23.9.1        |
+| redis                | 5.0.1         |
 
 </center>
 
@@ -115,6 +120,10 @@ Whole project is based on Python and Postgres database.
 
     [![postgres][Postgres-badge]][Postgres-docker-url] [![postgres-image-tag][Postgres-tag-badge]][Postgres-tag-url]
 
+* **Redis** server
+  * e.g. running as *Docker container* - for this project [the official image](https://hub.docker.com/_/redis) (provided by Docker) was chosen:
+  
+    [![redis][Redis-badge]][Redis-docker-url] [![redis-image-tag][Redis-tag-badge]][Redis-tag-url]
 
 ### Installation
 
@@ -149,7 +158,7 @@ psql -h localhost -U <user_name>
 
 
 ### Starting the app
-1. Run **Postgres database server**
+1. Run **Postgres** database server
    1. As Docker container via Desktop app:
       1. Proceed to `Containers` bookmark and click on `Run` button
    2. As Docker container via terminal:
@@ -157,27 +166,43 @@ psql -h localhost -U <user_name>
           ```
           docker start <container_name>
           ```
-2. Run **Flask** app
+2. Run **Redis** server
+   1. As Docker container via Desktop app:
+      1. Proceed to `Containers` bookmark and click on `Run` button
+   2. As Docker container via terminal:
+      1. Run the following command:
+          ```
+          docker start <container_name>
+          ```
+3. Run **Celery** handler
+   1. As python application:
+      ```
+      python -m celery -A website_app worker -l info -P gevent
+      ```
+      1. `-l info` - run in verbose mode (display all logs)
+      2. `-P gevent` - adding gevent pool for concurrency
+4. Run **Flask** app
    1. Proceed to its main folder location
    2. Run the following command:
         ```
-        flask --app __init__ run --debug
+        flask --app website_app run --debug
         ```
         1. `--debug` option is optional - can be used for debug purposes (ALSO: allows to insert changes while running the server)
 
 <!-- ROADMAP -->
 ## Roadmap
 
-- [ ] Create login/register forms
-  - [ ] Allow user authentication
-  - [ ] Create relational database in Postgres environment
-- [ ] Create users profile site
+- [x] Create login/register forms
+  - [x] Allow user authentication
+  - [x] Create relational database in Postgres environment
+- [x] Create users profile site
     - [ ] Add view of gave blood status
     - [ ] Add view for local blood giving actions
-- [ ] Connect to Postgres database
+- [x] Connect to Postgres database
   - [x] Create SQL Alchemy connection
   - [ ] Create database models
-
+- [x] Add concurrency for heavy tasks
+  - [x] Implement Celery handler
 
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
 
@@ -213,6 +238,11 @@ No license chosen at the time of creating this repository!
 [CSS]: https://img.shields.io/badge/CSS-239120?&style=for-the-badge&logo=css3&logoColor=white
 [JS]: https://img.shields.io/badge/JavaScript-F7DF1E?style=for-the-badge&logo=javascript&logoColor=black
 
+[Celery]: https://img.shields.io/badge/celery-%23a9cc54.svg?style=for-the-badge&logo=celery&logoColor=ddf4a4
+[Celery-url]: https://docs.celeryq.dev/en/stable/
+[Redis.io]: https://img.shields.io/badge/redis-%23DD0031.svg?style=for-the-badge&logo=redis&logoColor=white
+[Redis-url]: https://redis.io
+
 <!-- BADGES -->
 
 [Postgres-badge]: https://img.shields.io/badge/image-postgres-blue
@@ -220,3 +250,9 @@ No license chosen at the time of creating this repository!
 
 [Postgres-tag-badge]: https://img.shields.io/badge/TAG-11.22--bullseye-green
 [Postgres-tag-url]: https://hub.docker.com/layers/library/postgres/11.22-bullseye/images/sha256-b3de7d483937f2df1106398290b35c1bc0ecc7508e2d4a2d72ae7a42c41a4b90?context=explore
+
+[Redis-badge]: https://img.shields.io/badge/image-redis-blue
+[Redis-docker-url]: https://hub.docker.com/_/redis
+
+[Redis-tag-badge]: https://img.shields.io/badge/TAG-7.2.3-green
+[Redis-tag-url]: https://hub.docker.com/layers/library/redis/7.2.3/images/sha256-d4c84914b872521e215f77d8845914c2268a96b0e35bacd5691e1f5e1f88b500?context=explore
