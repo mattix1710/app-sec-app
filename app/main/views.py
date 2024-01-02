@@ -20,7 +20,8 @@ def my_profile():
     # otherwise - redirect to login page
     return redirect(url_for('auth.login'))
 
+# INFO: temporary site - created for checking celery proper installation
 @main.route("/really_long_task")
 def long_task():
-    really_long_wait()
+    really_long_wait.delay()
     return render_template('base.html')

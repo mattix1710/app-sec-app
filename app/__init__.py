@@ -7,7 +7,7 @@ import os
 # from flask_sslify import SSLify
 
 from . import setEnv
-from .async_celery import celery
+from .async_celery import celery as celery_config
 
 db = SQLAlchemy()
 mail_service = Mail()
@@ -53,15 +53,16 @@ def create_app():
     app.config['MAIL_USE_SSL'] = False
     mail_service.init_app(app)
     
+    # initialize Celery handler (along with connection to Redis server)
     app.config.from_mapping(
         CELERY=dict(
             broker_url = os.environ.get('REDIS_SERVER'),
             result_backend = os.environ.get('REDIS_SERVER'),
             task_ignore_result = True,
+            task_track_started = True,
         ),
     )
-    app.config.from_prefixed_env()
-    celery.celery_init_app(app)
+    celery_config.celery_init_app(app)
     
     Bootstrap(app)
     
