@@ -7,6 +7,7 @@ import functools
 from Crypto import Random
 import base64
 import os
+from celery import shared_task
 
 from ..models import User, Session, PassResetSession
 from .. import db
@@ -124,6 +125,7 @@ def check_admin_session():
         print("AUTH_ERR: not specified")
         return False
 
+@shared_task
 def send_password_reset_email(email):
     try:
         entry = User.query.filter_by(email=email).scalar()

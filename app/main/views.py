@@ -1,11 +1,11 @@
 from flask import render_template, redirect, url_for, request, session
-from datetime import datetime, timedelta
 from . import main
 
 from .. import db
 from ..models import User, Session, PassResetSession
 
 from ..auth.helpers import server_set_session, server_check_session, SESSION_NAME, check_admin_session
+from .helpers import *
 
 @main.route('/')
 def home():
@@ -27,3 +27,9 @@ def admin_panel():
         user = User.query.where(User.id == Session.query.where(Session.id == session[SESSION_NAME]['id']).scalar().uid).scalar()
         return render_template('admin/main_panel.html', user = user, user_session = True, table = reset_sessions, model = PassResetSession)
     return redirect(url_for('main.home'))
+
+# INFO: temporary site - created for checking celery proper installation
+@main.route("/really_long_task")
+def long_task():
+    really_long_wait.delay()
+    return render_template('base.html')
