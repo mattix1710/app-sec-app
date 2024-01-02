@@ -7,8 +7,11 @@ import os
 # from flask_sslify import SSLify
 
 from . import setEnv
+from .async_celery import celery
 
 db = SQLAlchemy()
+mail_service = Mail()
+
 
 DB_USER = 'postgres'
 DB_PASS = 'superduperpass'
@@ -18,8 +21,7 @@ DB_NAME = 'droplet_db'
 
 DB_URL = 'postgresql+psycopg://{user}:{passwd}@{url}/{db}'.format(user=DB_USER, passwd=DB_PASS, url=DB_CONN, db=DB_NAME)
 
-mail_service = Mail()
-
+# INFO: "Flask app factory pattern"
 def create_app():
     app = Flask(__name__)
     
@@ -50,6 +52,16 @@ def create_app():
     app.config['MAIL_USE_TLS'] = True
     app.config['MAIL_USE_SSL'] = False
     mail_service.init_app(app)
+    
+    app.config.from_mapping(
+        CELERY=dict(
+            broker_url = os.environ.get('REDIS_SERVER'),
+            result_backend = os.environ.get('REDIS_SERVER'),
+            task_ignore_result = True,
+        ),
+    )
+    app.config.from_prefixed_env()
+    celery.celery_init_app(app)
     
     Bootstrap(app)
     

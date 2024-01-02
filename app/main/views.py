@@ -1,11 +1,11 @@
 from flask import render_template, redirect, url_for, request, session
-from datetime import datetime, timedelta
 from . import main
 
 from .. import db
 from ..models import User, Session
 
 from ..auth.helpers import server_set_session, server_check_session, SESSION_NAME
+from .helpers import *
 
 @main.route('/')
 def home():
@@ -19,3 +19,8 @@ def my_profile():
         return render_template('profile.html', user = user, user_session=True)
     # otherwise - redirect to login page
     return redirect(url_for('auth.login'))
+
+@main.route("/really_long_task")
+def long_task():
+    really_long_wait()
+    return render_template('base.html')
