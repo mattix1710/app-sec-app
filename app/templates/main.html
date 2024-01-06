@@ -4,9 +4,16 @@
 
 {% block content %}
 
-<h1>Main page</h1>
-
 <div class="center-content">
+    <div class="droplet-showcase">
+        {% for blood_type in blood_list %}
+        <div class="blood_details">
+            <div class="droplet {{ blood_type[0] }}"></div>
+            {{ blood_type[1] }}
+        </div>
+        {% endfor %}
+    </div>
+
     <div class="img_view">
         <img src="../static/little_blood.png" alt="droplet" style="width: 150px;">
     </div>

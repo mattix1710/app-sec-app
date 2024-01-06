@@ -9,7 +9,7 @@ from .helpers import *
 
 @main.route('/')
 def home():
-    return render_template('main.html', user_session=server_check_session())
+    return render_template('main.html', user_session=server_check_session(), blood_list=gather_blood_type_stats())
 
 @main.route('/my_profile', methods=['GET', '[POST]'])
 def my_profile():
