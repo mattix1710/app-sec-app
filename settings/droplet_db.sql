@@ -50,3 +50,27 @@ CREATE TABLE "blood_state"(
 
     UNIQUE("blood_type")
 );
+
+-- NOT INSERTED YET
+
+ALTER TABLE "users" ADD "is_supervisor" BOOLEAN DEFAULT FALSE;
+
+CREATE TABLE "branch"(
+    "id" SERIAL PRIMARY KEY,
+    "supervisor" SERIAL REFERENCES users(id) NOT NULL,
+    "name" VARCHAR(255) UNIQUE KEY NOT NULL,
+    "address" VARCHAR(255) UNIQUE KEY NOT NULL
+);
+
+CREATE TABLE "post"(
+    "id" SERIAL PRIMARY KEY,
+    "branch_id" SERIAL REFERENCES branch(id) NOT NULL,
+    "content" TEXT NOT NULL
+);
+
+CREATE TABLE "comment"(
+    "id" SERIAL PRIMARY KEY,
+    "post_id" SERIAL REFERENCES post(id) NOT NULL,
+    "author_id" SERIAL REFERENCES users(id) NOT NULL,
+    "content" TEXT NOT NULL
+);
