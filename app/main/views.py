@@ -33,3 +33,8 @@ def admin_panel():
 def long_task():
     really_long_wait.delay()
     return render_template('base.html')
+
+@main.route("/tests")
+def tests():
+    gather_blood_type_stats()
+    return "<h1>Tests is progress</h1>"
