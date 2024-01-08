@@ -7,11 +7,12 @@ from ..models import User, Session, PassResetSession
 from ..auth.helpers import server_set_session, server_check_session, SESSION_NAME, check_admin_session
 from .helpers import *
 
-@main.route('/')
+
+@main.route('/', methods=['GET', 'POST'])
 def home():
     return render_template('main.html', user_session=server_check_session(), blood_list=gather_blood_type_stats())
 
-@main.route('/my_profile', methods=['GET', '[POST]'])
+@main.route('/my_profile', methods=['GET', 'POST'])
 def my_profile():
     # if user is logged in - show its profile data
     if server_check_session():        
