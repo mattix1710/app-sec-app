@@ -1,5 +1,5 @@
 import time
-from datetime import datetime
+from datetime import datetime, timedelta
 from celery import shared_task
 import urllib3
 from bs4 import BeautifulSoup
@@ -32,9 +32,9 @@ def gather_blood_type_stats():
     # check if blood_state is up-to-date in database and return data from it
     my_data = BloodState.query.all()
     
-    if my_data[0].last_update < datetime.now().date():
+    if my_data[0].last_update + timedelta(hours=3) < datetime.now():
         # otherwise - get data from the website
-        print("DEBUG: visit website and gather newest info!")
+        print("DEBUG: visit website and gather newest blood stats!")
         headers = {
         'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/118.0.0.0 Safari/537.36 Vivaldi/6.4.3160.47'
         }
@@ -53,14 +53,16 @@ def gather_blood_type_stats():
             for blood in drops:
                 if blood_data.blood_type == blood[1]:
                     blood_data.amount = blood[0]
+            blood_data.last_update = datetime.now()
         
         db.session.commit()
         
         # TODO: add order assertion - for the blood type to be always at the correct position
         return drops
         
-    drops = []
+    print("DEBUG: blood stats gathered from database.")
     
+    drops = []
     for blood_data in sorted(my_data, key=lambda BloodState: BloodState.id):
         drops.append((blood_data.amount, blood_data.blood_type))
     

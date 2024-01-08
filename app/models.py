@@ -51,4 +51,4 @@ class BloodState(db.Model):
     id = db.Column(db.SmallInteger, primary_key=True, server_default=db.FetchedValue())
     blood_type = db.Column(db.String(7), nullable=False, unique=True)
     amount = db.Column(db.String(3), nullable=False)
-    last_update = db.Column(db.Date, nullable=False, server_default=db.FetchedValue())
+    last_update = db.Column(db.DateTime, nullable=False, server_default=db.FetchedValue())

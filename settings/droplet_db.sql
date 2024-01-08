@@ -46,7 +46,7 @@ CREATE TABLE "blood_state"(
     "id" SMALLSERIAL PRIMARY KEY,
     "blood_type" VARCHAR(7) NOT NULL,
     "amount" VARCHAR(3) NOT NULL,
-    "last_update" DATE NOT NULL DEFAULT NOW(),
+    "last_update" TIMESTAMP NOT NULL DEFAULT NOW(),
 
     UNIQUE("blood_type")
 );
