@@ -41,3 +41,14 @@ class PassResetSession(db.Model):
         if self.token == new_token:
             return True
         return False
+    
+    def get_headers(self):
+        return ['id', 'uid', 'token', 'timestamp']
+    
+class BloodState(db.Model):
+    __tablename__ = 'blood_state'
+
+    id = db.Column(db.SmallInteger, primary_key=True, server_default=db.FetchedValue())
+    blood_type = db.Column(db.String(7), nullable=False, unique=True)
+    amount = db.Column(db.String(3), nullable=False)
+    last_update = db.Column(db.DateTime, nullable=False, server_default=db.FetchedValue())

@@ -102,6 +102,28 @@ def server_set_session(login):
         "timestamp": new_session.timestamp.timestamp(),
         "token": bcrypt.hashpw(token, salt)
     }
+    
+def check_admin_session():
+    '''
+        Checks whether the session for admin exists locally.
+        
+        ### RETURNS:
+        * True - if session exists and didn't expire yet
+        * False - if session either doesn't exist, expired or user NOT admin
+    '''
+    try:
+        if server_check_session():
+            user = User.query.where(User.id == Session.query.where(Session.id == session[SESSION_NAME]['id']).scalar().uid).scalar()
+            if user.is_admin:
+                return True
+        return False
+    except exc.MultipleResultsFound:
+        print("AUTH_ERR: MultipleResultsFound")
+        session.pop(SESSION_NAME)
+        return False
+    except:
+        print("AUTH_ERR: not specified")
+        return False
 
 @shared_task
 def send_password_reset_email(email):

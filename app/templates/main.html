@@ -4,12 +4,38 @@
 
 {% block content %}
 
-<h1>Main page</h1>
-
 <div class="center-content">
-    <div class="img_view">
-        <img src="../static/little_blood.png" alt="droplet" style="width: 150px;">
+    <div class="droplet-showcase">
+        {% for blood_type in blood_list %}
+        <div class="blood_details">
+            <div class="droplet {{ blood_type[0] }}"></div>
+            {{ blood_type[1] }}
+        </div>
+        {% endfor %}
     </div>
+    <hr width="600px", size="2">
+    <section class="news">
+        <div class="news-topbar">
+            <h1>News</h1>
+            <div class="img_view">
+                <img src="../static/little_blood.png" alt="droplet" style="width: 100px;">
+            </div>
+        </div>
+        <div class="news-content">
+            <div class="news-details">
+                <h1>Wonderful stats in new year!</h1>
+                <p class="news-paragraph">
+                    Lorem ipsum dolor sit amet, consectetur adipiscing elit. Vivamus dictum ullamcorper nisl et convallis. Nullam porttitor egestas fermentum. Aliquam tempor mi vel quam semper, vitae fermentum nunc maximus. Nunc fermentum ex dui, a tempor dui elementum quis. Nullam sollicitudin orci non gravida volutpat. Lorem ipsum dolor sit amet, consectetur adipiscing elit. Donec eget scelerisque turpis, et ornare diam.
+
+Interdum et malesuada fames ac ante ipsum primis in faucibus. Donec varius, dui at pulvinar elementum, dolor eros dignissim lectus, et semper odio ante non nunc. Aliquam semper sagittis turpis, et congue elit consequat vel. Sed nec sapien sit amet arcu convallis.
+                </p>
+                <form method="POST" action="">
+                    <button type="submit" value="details" name="read_more">Read more</button>
+                </form>
+            </div>
+            Some new news!
+        </div>
+    </section>
 </div>
 
 {% if request.args.get('token') %}
