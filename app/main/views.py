@@ -39,3 +39,9 @@ def long_task():
 def tests():
     gather_blood_type_stats()
     return "<h1>Tests is progress</h1>"
+
+@main.route("/news/<post_title>", methods=['GET', 'POST'])
+def news_details(post_title=None):
+    if post_title == None:
+        return redirect(url_for('main.home'))
+    

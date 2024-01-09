@@ -4,6 +4,7 @@ CREATE TABLE "users"(
     "email" VARCHAR(255)    NOT NULL,
     "password" VARCHAR(72)  NOT NULL,
     "is_active" BOOLEAN     NOT NULL,
+    "is_supervisor" BOOLEAN NOT NULL DEFAULT FALSE,
     "is_admin" BOOLEAN      NOT NULL DEFAULT FALSE,
     "last_logged" date      NOT NULL DEFAULT NOW(),
 
@@ -22,9 +23,9 @@ CREATE TABLE "user_personal_data"(
 CREATE TABLE "user_giving_dates"(
     "id" SERIAL PRIMARY KEY,
     "user_id" SERIAL REFERENCES users(id) NOT NULL,
-    "date" date             NOT NULL,
+    "date" DATE             NOT NULL,
     "amount" DECIMAL        NOT NULL,
-    "location" VARCHAR(150) NOT NULL
+    "location" SERIAL       REFERENCES branch(id)
 );
 
 CREATE TABLE "sessions"(
@@ -53,11 +54,9 @@ CREATE TABLE "blood_state"(
 
 -- NOT INSERTED YET
 
-ALTER TABLE "users" ADD "is_supervisor" BOOLEAN DEFAULT FALSE;
-
 CREATE TABLE "branch"(
     "id" SERIAL PRIMARY KEY,
-    "supervisor" SERIAL REFERENCES users(id) NOT NULL,
+    "supervisor" SERIAL REFERENCES users(id),
     "name" VARCHAR(255) UNIQUE KEY NOT NULL,
     "address" VARCHAR(255) UNIQUE KEY NOT NULL
 );
@@ -65,6 +64,7 @@ CREATE TABLE "branch"(
 CREATE TABLE "post"(
     "id" SERIAL PRIMARY KEY,
     "branch_id" SERIAL REFERENCES branch(id) NOT NULL,
+    "title" TEXT UNIQUE KEY NOT NULL,
     "content" TEXT NOT NULL
 );
 
