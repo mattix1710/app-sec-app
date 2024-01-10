@@ -57,20 +57,21 @@ CREATE TABLE "blood_state"(
 CREATE TABLE "branch"(
     "id" SERIAL PRIMARY KEY,
     "supervisor" SERIAL REFERENCES users(id),
-    "name" VARCHAR(255) UNIQUE KEY NOT NULL,
-    "address" VARCHAR(255) UNIQUE KEY NOT NULL
+    "name" VARCHAR(255) UNIQUE NOT NULL,
+    "address" VARCHAR(255) UNIQUE NOT NULL
 );
 
 CREATE TABLE "post"(
     "id" SERIAL PRIMARY KEY,
-    "branch_id" SERIAL REFERENCES branch(id) NOT NULL,
-    "title" TEXT UNIQUE KEY NOT NULL,
+    "branch_id" SERIAL REFERENCES branch(id) ON DELETE CASCADE NOT NULL,
+    "title" TEXT UNIQUE NOT NULL,
+    "title_normalized" TEXT UNIQUE NOT NULL,
     "content" TEXT NOT NULL
 );
 
 CREATE TABLE "comment"(
     "id" SERIAL PRIMARY KEY,
-    "post_id" SERIAL REFERENCES post(id) NOT NULL,
+    "post_id" SERIAL REFERENCES post(id) ON DELETE CASCADE NOT NULL,
     "author_id" SERIAL REFERENCES users(id) NOT NULL,
     "content" TEXT NOT NULL
 );

@@ -1,0 +1,15 @@
+{% extends 'base/base.html' %}
+
+{% import "bootstrap/wtf.html" as wtf %}
+
+{% block content %}
+    <h1 class="centered">{% block title %} Log-in to Admin Panel {% endblock %}</h1>
+    <div>
+        {{ wtf.quick_form(form) }}
+    </div>
+    <div class="tile">
+        Can't remember the password?
+        <a class="btn-reset" href="{{ url_for('auth.forgot_password') }}">Reset password</a>
+    </div>
+
+{% endblock %}

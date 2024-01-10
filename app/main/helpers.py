@@ -4,7 +4,6 @@ from celery import shared_task
 import urllib3
 from bs4 import BeautifulSoup
 import re
-from flask import escape
 
 from ..models import BloodState
 from .. import db

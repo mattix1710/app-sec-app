@@ -9,7 +9,7 @@ from .forms import RegistrationForm, LoginForm, ForgotPasswordForm, ResetPasswor
 from ..models import User, Session
 from .. import db
 
-from .helpers import hash_the_pass, server_check_session, server_set_session, SESSION_NAME, send_password_reset_email, validate_token, user_pass_update, check_admin_session
+from .helpers import hash_the_pass, server_check_session, server_set_session, SESSION_NAME, send_password_reset_email, validate_token, user_pass_update, check_admin_session, check_admin_privileges
 
 @auth.route('/')
 def index():
@@ -115,8 +115,13 @@ def admin_login():
         return redirect(url_for('main.admin_panel'))
     
     form = LoginForm()
+    # INFO: IDEA - add some testing if the user is requesting multiple wrong logins - prevent brute-forcing
+    print("IP:", request.remote_addr)
     
     if form.validate_on_submit():
-        server_set_session(form.username.data)
-        return redirect(url_for('main.admin_panel'))
-    return render_template('auth/login.html', form=form)
+        # check if user has admin privileges
+        if check_admin_privileges(form.username.data):
+            server_set_session(form.username.data)
+            return redirect(url_for('main.admin_panel'))
+        return redirect(url_for('auth.login'))
+    return render_template('auth/admin_login.html', form=form)

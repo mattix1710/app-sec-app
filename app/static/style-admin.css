@@ -79,60 +79,6 @@ h1.centered {
     margin: 10px auto;
 }
 
-.form, .tile{
-    width: fit-content;
-    border: 1px solid #aaa;
-    border-radius: 10px 10px;
-    padding: 50px;
-    margin: 0 auto;
-    background-color: #eee;
-    display: flex;
-    flex-direction: column;
-    gap: 20px;
-    text-transform: capitalize;
-}
-
-.tile{
-    text-transform: none;
-}
-
-.form-group {
-    display: flex;
-    flex-direction: column;
-    gap: 10px;
-}
-
-.form-control {
-    height: 2em;
-    width: 20vw;
-}
-
-.btn, .btn-reset{
-    margin-top: 10px;
-    height: 3em;
-    width: 50%;
-    align-self: flex-end;
-    color: white;
-    background-color: #d64161;
-    font-weight: bold;
-}
-
-.btn:hover, .btn-reset:hover{
-    /* background-color: #AB5467; */
-    background-color: #a1233e;
-}
-
-.btn-reset{
-    height: auto;
-    padding: 10px;
-    margin: 0;
-    width: auto;
-}
-
-.help-block {
-    color: red;
-    margin: 0;
-}
 
 .center-content{
     display: flex;
@@ -159,7 +105,6 @@ h1.centered {
     border-radius: 10px;
     border: 2px solid;
     border-color: #a1233e;
-    margin: 10px;
 }
 
 .profile-tile{
@@ -204,132 +149,41 @@ h1.centered {
     border-color: rgba(151, 151, 151, 0.5);
 }
 
+
 /* ==================================== */
-/* MAIN - blood details */
+/* ADMIN Panel */
 /* ==================================== */
 
-div.droplet-showcase{
+.admin-main{
     display: flex;
     flex-direction: row;
     flex-wrap: wrap;
-    justify-content: center;
+    justify-content: flex-start;
     align-items: flex-start;
     align-content: flex-start;
 }
 
-div.blood_details{
-    display: flex;
-    flex-direction: column;
-    flex-wrap: wrap;
-    justify-content: flex-start;
-    align-items: flex-start;
-    align-content: center;
-
-    width: 60px;
-    
-    padding: 20px 5px 0px 5px;
-}
-
-div.droplet {
-    position: static;
-    width:50px;
-    height: 50px;
-    border-radius: 80% 0 55% 50% / 55% 0 80% 50%;
-    /* background-color: rgb(195, 8, 8); */
-    transform: rotate(-45deg);
-}
-
-div.droplet.qF{
-    background-color: rgb(195, 8, 8);
-    /* background: linear-gradient(45deg, rgb(195, 8, 8) 25%, #F9E6E6 25%); */
-}
-
-div.droplet.qM{
-    background: linear-gradient(45deg, rgb(195, 8, 8) 60%, #F9E6E6 60%);
-}
-
-div.droplet.qL{
-    background: linear-gradient(45deg, rgb(195, 8, 8) 35%, #F9E6E6 35%);
-}
-
-div.droplet.qVL{
-    background: linear-gradient(45deg, rgb(195, 8, 8) 20%, #F9E6E6 20%);
-}
-
-/* MAIN - news */
-.news{
-    display: flex;
-    flex-direction: column;
-    flex-wrap: wrap;
-    justify-content: center;
-    align-items: center;
-    align-content: center;
-
-    width: 800px;
-
-    border: solid;
-    border-width: 3px;
-    border-color: greenyellow;
-    border-radius: 10px;
-}
-
-.news-topbar{
-    display: flex;
-    flex-direction: row;
-    flex-wrap: wrap;
-    justify-content: space-between;
-    align-items: center;
-    align-content: center;
-
-    width: 90%;
-    border: solid;
-    border-width: 2px;
-    border-color: blue;
-
-    margin: 10px;
-}
-
-.news-content{
-    display: flex;
-    flex-direction: column;
-    flex-wrap: wrap;
-    justify-content: flex-start;
-    align-items: center;
-    align-content: center;
-    
-    width: 100%;
-    margin: 10px 0px;
+.admin-bookmark{
+    width: 10vw;
 
     border: solid;
     border-width: 2px;
-    border-color: cyan;
+    border-color: aquamarine;
 }
 
-.news-details{
-    width: 90%;
-
+.admin-content{
+    width: 88vw;
+    font-size: larger;
+    
     border: solid;
     border-width: 2px;
     border-color: orange;
 }
 
-p.news-paragraph{
-    overflow: hidden;
-    display: -webkit-box;
-    -webkit-line-clamp: 4;
-    -webkit-box-orient: vertical;
-  }
+.admin-content-internal{
+    margin: 10px;
 
-/* .img_view {
-    margin-left: auto;
-    margin-right: auto;
-} */
-
-.button-news-details{
-    margin-left: auto;
-    maargin-right: 0px;
-}
-
-.profile-view.branch-view{
-    width: 500px;
+    border: solid;
+    border-width: 2px;
+    border-color: green;
 }

@@ -1,6 +1,6 @@
-{% extends 'base.html' %}
+{% extends 'base/base-admin.html' %}
 
-{% block title %} My profile {% endblock %}
+{% block title %} ADMIN PANEL {% endblock %}
 
 {% block content %}
 
@@ -29,6 +29,47 @@
             {% endfor %}
         </table>
         {% endif %}
+    </div>
+
+    <div class="admin-main">
+        <div class="admin-bookmark">
+            <ul>
+                <li><a class="bookmark-item" title="Display users list" href="#" onclick="display_elem('users');return false;">Users</a></li>
+                <li><a class="bookmark-item" title="Show item 2" href="#" onclick="display_elem('content-item2');return false;">ITEM 2</a></li>
+                <li><a class="bookmark-item" title="Show item 3" href="#" onclick="display_elem('content-item3');return false;">ITEM 3</a></li>
+            </ul>
+        </div>
+        <div class="admin-content">
+            <div class="admin-content-internal" id="users">
+                {% if user_table %}
+                <table class="table_admin">
+                    <tr>
+                        {% for header in user_table[0].get_headers() %}
+                        <th>{{ header }}</th>
+                        {% endfor %}
+                    </tr>
+                    {% for record in user_table %}
+                    <tr>
+                        <td>{{ record.id }}</td>
+                        <td>{{ record.username }}</td>
+                        <td>{{ record.email }}</td>
+                        <td>{{ record.is_active }}</td>
+                        <td>{{ record.is_supervisor }}</td>
+                        <td>{{ record.is_admin }}</td>
+                    </tr>
+                    {% endfor %}
+                {% endif %}
+            </div>
+            <div class="admin-content-internal" id="content-item1">
+                Lorem ipsum dolor sit amet, consectetur adipiscing elit. Phasellus efficitur ante ut facilisis bibendum. Aliquam varius, metus sit amet rhoncus iaculis, ante nisl consectetur ex, sed faucibus mauris magna hendrerit nibh. Vivamus quis leo nulla. Aliquam efficitur quam a felis egestas, sit amet dignissim lorem ultrices. Nam quis nisl sed nibh interdum tristique. Quisque diam mauris, bibendum facilisis consectetur sed, lobortis in erat. Fusce vitae pulvinar arcu. Donec eu nunc accumsan, vestibulum arcu et, tempus leo. Nullam sed turpis quis odio auctor sollicitudin vitae vitae nibh. Etiam ex elit, ornare a elit quis, volutpat tempus eros. Cras nibh dui, pellentesque vel nulla commodo, viverra ornare est. Pellentesque arcu turpis, egestas id facilisis quis, viverra sed orci. Nam a leo quis ex posuere porta.
+            </div>
+            <div class="admin-content-internal" id="content-item2">
+                Nullam mattis et turpis nec gravida. Phasellus bibendum sem sed felis accumsan, ac porta diam iaculis. Lorem ipsum dolor sit amet, consectetur adipiscing elit. Vestibulum ante ipsum primis in faucibus orci luctus et ultrices posuere cubilia curae; Quisque bibendum, metus vel pretium fermentum, lectus ligula rhoncus dui, at pellentesque est sapien non dolor. Etiam sagittis egestas lorem, a sollicitudin risus sodales ac. Donec eget nisl venenatis, dapibus dolor nec, viverra nisl. Etiam laoreet dictum elit in fermentum. Vestibulum ac semper diam. Sed nulla mi, mollis in consectetur eget, molestie at justo. Phasellus consectetur molestie justo vel vulputate. Proin sit amet ligula ut ante pretium ultricies id ac dolor. Integer ac justo rutrum odio lobortis commodo.
+            </div>
+            <div class="admin-content-internal" id="content-item3">
+                Curabitur in molestie lorem. Quisque pulvinar eleifend est, ut pellentesque dui consectetur pharetra. Fusce laoreet ac arcu a vulputate. Pellentesque pulvinar euismod quam in venenatis. Morbi vestibulum dapibus nulla, id mattis purus vehicula quis. Nam commodo erat id ante molestie posuere. Duis dapibus euismod libero, vitae bibendum felis tincidunt a. Nulla bibendum pulvinar lorem, eget vulputate augue rutrum nec. Aliquam in odio orci. Nam eu fringilla mauris. Mauris facilisis tortor ligula, id venenatis nibh aliquam ac. Vestibulum iaculis malesuada nisi, eget luctus felis vulputate eget. Sed a lacus vel lorem tristique tempor vel nec magna.
+            </div>
+        </div>
     </div>
 </div>
 
