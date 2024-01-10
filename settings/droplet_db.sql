@@ -63,14 +63,15 @@ CREATE TABLE "branch"(
 
 CREATE TABLE "post"(
     "id" SERIAL PRIMARY KEY,
-    "branch_id" SERIAL REFERENCES branch(id) NOT NULL,
+    "branch_id" SERIAL REFERENCES branch(id) ON DELETE CASCADE NOT NULL,
     "title" TEXT UNIQUE NOT NULL,
+    "title_normalized" TEXT UNIQUE NOT NULL,
     "content" TEXT NOT NULL
 );
 
 CREATE TABLE "comment"(
     "id" SERIAL PRIMARY KEY,
-    "post_id" SERIAL REFERENCES post(id) NOT NULL,
+    "post_id" SERIAL REFERENCES post(id) ON DELETE CASCADE NOT NULL,
     "author_id" SERIAL REFERENCES users(id) NOT NULL,
     "content" TEXT NOT NULL
 );
