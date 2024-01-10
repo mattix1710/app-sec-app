@@ -69,3 +69,25 @@ class Branch(db.Model):
     
     def get_headers_details(self):
         return ['supervisor', 'name', 'address']
+
+class Post(db.Model):
+    __tablename__ = 'post'
+
+    id = db.Column(db.Integer, primary_key=True, server_default=db.FetchedValue())
+    branch_id = db.Column(db.ForeignKey('branch.id', ondelete='CASCADE'), nullable=False, server_default=db.FetchedValue())
+    title = db.Column(db.Text, nullable=False, unique=True)
+    title_normalized = db.Column(db.Text, nullable=False, unique=True)
+    content = db.Column(db.Text, nullable=False)
+
+    branch = db.relationship('Branch', primaryjoin='Post.branch_id == Branch.id', backref='posts')
+    
+class Comment(db.Model):
+    __tablename__ = 'comment'
+
+    id = db.Column(db.Integer, primary_key=True, server_default=db.FetchedValue())
+    post_id = db.Column(db.ForeignKey('post.id', ondelete='CASCADE'), nullable=False, server_default=db.FetchedValue())
+    author_id = db.Column(db.ForeignKey('users.id'), nullable=False, server_default=db.FetchedValue())
+    content = db.Column(db.Text, nullable=False)
+
+    author = db.relationship('User', primaryjoin='Comment.author_id == User.id', backref='comments')
+    post = db.relationship('Post', primaryjoin='Comment.post_id == Post.id', backref='comments')
