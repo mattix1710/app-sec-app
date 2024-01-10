@@ -1,0 +1,26 @@
+{% extends 'base/base.html' %}
+
+{% block title %} Branch - {{ branch.name }} {% endblock %}
+
+{% block content %}
+
+<div class="center-content">
+    <div class="profile-view branch-view">
+        <h1 class="centered">{{ branch.name }}</h1>
+
+        <h3>Branch details:</h3>
+        <div class="profile-tile">
+            <div class="profile-tile-info">supervisor ID</div><div class="profile-tile-data">{{ branch.supervisor }}</div>
+        </div>
+        <div class="profile-tile">
+            <div class="profile-tile-info">name</div><div class="profile-tile-data">{{ branch.name }}</div>
+        </div>
+        <div class="profile-tile">
+            <div class="profile-tile-info">address</div><div class="profile-tile-data">{{ branch.address }}</div>
+        </div>
+    </div>
+
+    <!-- TODO: add new post creator & post viewer/editor -->
+</div>
+
+{% endblock %}

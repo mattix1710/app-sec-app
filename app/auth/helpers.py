@@ -9,7 +9,7 @@ import base64
 import os
 from celery import shared_task
 
-from ..models import User, Session, PassResetSession
+from ..models import User, Session, PassResetSession, Branch
 from .. import db
 from .. import mail_service
 
@@ -24,12 +24,13 @@ def hash_the_pass(passwd):
 #############################################
 # TIME DELTA SECONDS
 DELTA_SECS = 3600
+ADMIN_DELTA_SECS = 300
 SESSION_NAME = 'session_data'
 SESSION_TOKEN = 'save_my_bandwidth'     # TODO: change and move to env variables
 TOKEN_EXPIRATION = 15*60
 SERVER_IP = "127.0.0.1:5000"
 
-def check_session():
+def check_session(admin_check = False):
     '''
         Checks whether the session exists locally.
         
@@ -38,15 +39,21 @@ def check_session():
         * False - if session either doesn't exist or expired
     '''
     if SESSION_NAME in session:
-        session_data = Session.query.where(Session.id == session[SESSION_NAME]).scalar()
-        # if session with this ID exists
-        if session_data != None:
+        token = (str(session[SESSION_NAME]['id']) + str(session[SESSION_NAME]['timestamp']) + str(SESSION_TOKEN)).encode('utf-8')
+        # if session token matches
+        if bcrypt.checkpw(token, session[SESSION_NAME]['token']):
             # if session didn't expire
-            if session_data.timestamp + timedelta(0, DELTA_SECS) > datetime.now():
-                return True
-            # otherwise - pop the data from cookie and return False
-            session.pop(SESSION_NAME)
-    return False
+            session_data = Session.query.where(Session.id == session[SESSION_NAME]['id']).scalar()
+            user_info = User.query.where(User.id == session_data.uid).scalar()
+            
+            # if session with this ID exists
+            if session_data != None:
+                # if session didn't expire
+                if session_data.timestamp + timedelta(0, DELTA_SECS) > datetime.now():
+                    return [True, user_info.is_supervisor]
+                # otherwise - pop the data from cookie and return False
+                session.pop(SESSION_NAME)
+    return [False, False]
 
 def set_session(login):
     '''
@@ -58,7 +65,7 @@ def set_session(login):
 
     session[SESSION_NAME] = str(new_session.id)
     
-def server_check_session():
+def server_check_session(admin_check = False):
     '''
         Checks whether the session exists locally.
         Similar to 'check_session()' method, but evaluates the data stored in the cookie,
@@ -74,12 +81,16 @@ def server_check_session():
         # if session token matches
         if bcrypt.checkpw(token, session[SESSION_NAME]['token']):
             # if session didn't expire
+            if admin_check:
+                # check for admin: with less timedelta
+                if datetime.fromtimestamp(session[SESSION_NAME]['timestamp']) + timedelta(0, ADMIN_DELTA_SECS) > datetime.now():
+                    return True
             if datetime.fromtimestamp(session[SESSION_NAME]['timestamp']) + timedelta(0, DELTA_SECS) > datetime.now():
                 return True
             # otherwise - pop the data from cookie and return False
             session.pop(SESSION_NAME)
-    return False    
-    
+    return False
+
 def server_set_session(login):
     '''
         Sets new session based on given credentials.
@@ -123,6 +134,16 @@ def check_admin_session():
         return False
     except:
         print("AUTH_ERR: not specified")
+        return False
+
+def check_admin_privileges(username):
+    try:
+        user = User.query.where(User.username == username).scalar()
+        if user.is_admin:
+            return True
+        return False
+    except exc.MultipleResultsFound:
+        print("AUTH_ERR: MultipleResultsFound")
         return False
 
 @shared_task
@@ -227,3 +248,12 @@ def user_pass_update(id, password):
     user.password = pass_hash
     # db.session.add(user)
     db.session.commit()
+    
+def get_supervisor_branch():
+    if SESSION_NAME in session:
+        session_id = session[SESSION_NAME]['id']
+        
+        branch_details = Branch.query.where(Branch.supervisor == Session.query.where(Session.id == session_id).scalar().uid).scalar()
+        
+        return branch_details
+    return False

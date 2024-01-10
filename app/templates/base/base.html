@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>{% block title %} {% endblock %}- FlaskApp</title>
+    <title>{% block title %} {% endblock %} - DropletApp</title>
     <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
     <link rel="shortcut icon" href="{{ url_for('static', filename='favicon.ico') }}">
 </head>
@@ -13,10 +13,13 @@
                 <nav>
                     <a href="{{ url_for('main.home') }}">Home</a>
                     {% if user_session %}
-                    <a href="{{ url_for('main.my_profile')}}">My Profile</a>
+                        <a href="{{ url_for('main.my_profile')}}">My Profile</a>
                     {% else %}
-                    <a href="{{ url_for('auth.register') }}">Register</a>
-                    <a href="{{ url_for('auth.login') }}">Log in</a>
+                        <a href="{{ url_for('auth.register') }}">Register</a>
+                        <a href="{{ url_for('auth.login') }}">Log in</a>
+                    {% endif %}
+                    {% if is_supervisor %}
+                        <a href="{{ url_for('main.branch_desc') }}">Branch supervising</a>
                     {% endif %}
                 </nav>
             </div>

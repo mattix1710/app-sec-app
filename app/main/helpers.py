@@ -67,3 +67,12 @@ def gather_blood_type_stats():
         drops.append((blood_data.amount, blood_data.blood_type))
     
     return drops
+
+def process_title():
+    '''
+    Helper method handling processing the title for news subsite:
+    * lowercase whole text
+    * replace characters with HTML escape alternatives
+    * replace whitespace with dashes
+    * etc.
+    '''
