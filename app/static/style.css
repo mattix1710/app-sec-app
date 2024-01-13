@@ -143,6 +143,11 @@ h1.centered {
     align-content: center;
 }
 
+.form #content{
+    height: auto;
+    width: auto;
+}
+
 /* PROFILE */
 .profile-view{
     width: auto;

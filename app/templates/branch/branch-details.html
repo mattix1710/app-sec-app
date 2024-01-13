@@ -21,6 +21,23 @@
     </div>
 
     <!-- TODO: add new post creator & post viewer/editor -->
+    <a href="{{ url_for('main.branch_create_post') }}">Create New Post</a>
+
+    <table class="post-view">
+        <tr>
+            <th>Title</th>
+            <th>Options</th>
+        </tr>
+        {% for post in posts %}
+        <tr>
+            <td>{{ post.title }}</td>
+            <td>
+                <a href="{{ url_for('main.branch_edit_post', post_title=post.title_normalized) }}">Edit</a>
+                <a href="{{ url_for('main.branch_delete_post', post_title=post.title_normalized) }}">Delete</a>
+            </td>
+        </tr>
+        {% endfor %}
+    </table>
 </div>
 
 {% endblock %}

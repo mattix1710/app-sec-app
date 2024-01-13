@@ -1,0 +1,13 @@
+{% extends 'base/base.html' %}
+
+{% import "bootstrap/wtf.html" as wtf %}
+
+{% block title %} Branch - {{ branch.name }} {% endblock %}
+
+{% block content %}
+
+<div class="center-content">
+    {{ wtf.quick_form(form) }}
+</div>
+
+{% endblock %}

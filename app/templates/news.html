@@ -1,0 +1,28 @@
+{% extends 'base/base.html' %}
+
+{% import "bootstrap/wtf.html" as wtf %}
+
+{% block title %} News - {{ post.title }} {% endblock %}
+
+{% block content %}
+
+<div class="center-content">
+    <div class="news-content">
+        <h3>{{ post.title }}</h3>
+        <div class="news-details">{{ post.content }}</div>
+    </div>
+    <div class="news-content">
+        <h3>Comments:</h3>
+        {% for comment in comments %}
+        <p>
+            <!-- <b>{{ comment.author_id }}:</b> <br> -->
+            {{ comment.content }}
+        </p>
+        {% endfor %}
+    </div>
+    {% if user_session %}
+    {{ wtf.quick_form(form) }}
+    {% endif %}
+</div>
+
+{% endblock %}

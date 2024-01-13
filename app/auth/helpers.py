@@ -8,10 +8,12 @@ from Crypto import Random
 import base64
 import os
 from celery import shared_task
+import html
 
-from ..models import User, Session, PassResetSession, Branch
+from ..models import User, Session, PassResetSession, Branch, Post, Comment
 from .. import db
 from .. import mail_service
+from ..main.helpers import process_title
 
 def hash_the_pass(passwd):
     passwd = passwd.encode("utf-8")
@@ -257,3 +259,53 @@ def get_supervisor_branch():
         
         return branch_details
     return False
+
+def get_post(title):
+    post = Post.query.where(Post.id == Post.query.where(Post.title_normalized == title).scalar().id).scalar()
+    return post
+
+def get_posts():
+    if SESSION_NAME in session:
+        session_id = session[SESSION_NAME]['id']
+        posts = Post.query.where(Post.branch_id == Session.query.where(Session.id == session_id).scalar().uid)
+        return posts
+    return []
+
+def get_post_comments(title):
+    comments = Comment.query.where(Comment.post_id == Post.query.where(Post.title_normalized == title).scalar().id)
+    # comments.join(User, User.id == Comment.author_id)
+    return comments
+
+def add_comment(title, form):
+    if SESSION_NAME in session:
+        session_id = session[SESSION_NAME]['id']
+        comment = Comment(post_id = Post.query.where(Post.title_normalized == title).scalar().id,
+                          author_id = Session.query.where(Session.id == session_id).scalar().uid,
+                          content = html.escape(form.content.data))
+        db.session.add(comment)
+        db.session.commit()
+
+def create_post(title, content):
+    if SESSION_NAME in session:
+        session_id = session[SESSION_NAME]['id']
+        post = Post(branch_id = Session.query.where(Session.id == session_id).scalar().uid,
+                    title = title,
+                    title_normalized = process_title(title),
+                    content = content)
+        db.session.add(post)
+        db.session.commit()
+
+def update_post(supervisor, old_title, form):
+    if SESSION_NAME in session:
+        session_id = session[SESSION_NAME]['id']
+        title_normalised = process_title(old_title)
+        post = Post.query.where(Post.branch_id == supervisor and Post.title_normalized == title_normalised).scalar()
+        post.title = form.title.data
+        post.title_normalized = process_title(form.title.data)
+        post.content = form.content.data
+        db.session.commit()
+
+def delete_post(post):
+    if SESSION_NAME in session:
+        db.session.delete(post)
+        db.session.commit()

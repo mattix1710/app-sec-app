@@ -1,10 +1,11 @@
 from flask_wtf import FlaskForm
-from wtforms import StringField, PasswordField, SubmitField
+from wtforms import StringField, PasswordField, SubmitField, TextAreaField
 from wtforms.validators import DataRequired, Length, Email, Regexp, EqualTo
 from wtforms import ValidationError
 import bcrypt
 
-from ..models import User
+from ..models import User, Post
+from ..main.helpers import process_title
 
 class RegistrationForm(FlaskForm):
     email = StringField('e-mail', validators=[DataRequired(), Length(1, 100), Email()])
@@ -54,3 +55,35 @@ class ResetPasswordForm(FlaskForm):
     password2 = PasswordField('Confirm password', validators=[DataRequired()])
 
     submit = SubmitField('Change password')
+
+
+class CreatePostForm(FlaskForm):
+    title = TextAreaField('Title', validators=[DataRequired()])
+    content = TextAreaField('Content', render_kw={"rows": 40, "cols": 100}, validators=[DataRequired()])
+
+    submit = SubmitField('Save post')
+
+    def validate_title(self, field):
+        title_normalised = process_title(field.data)
+        print(process_title(field.data))
+        if Post.query.where(Post.title_normalized == title_normalised).count() > 0:
+            raise ValidationError('Post Exists')
+
+
+class EditPostForm(FlaskForm):
+    title = TextAreaField('Title', validators=[DataRequired()])
+    content = TextAreaField('Content', render_kw={"rows": 40, "cols": 100}, validators=[DataRequired()])
+
+    submit = SubmitField('Save post')
+
+    def validate_title(self, field):
+        title_normalised = process_title(field.data)
+        print(process_title(field.data))
+        if Post.query.where(Post.title_normalized == title_normalised).count() > 1:
+            raise ValidationError('Post Exists')
+
+
+class AddCommentForm(FlaskForm):
+    content = TextAreaField('Comment body', render_kw={"rows": 4, "cols": 50}, validators=[DataRequired()])
+
+    submit = SubmitField('Post comment')

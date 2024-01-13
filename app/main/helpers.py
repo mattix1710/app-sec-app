@@ -4,6 +4,7 @@ from celery import shared_task
 import urllib3
 from bs4 import BeautifulSoup
 import re
+import html
 
 from ..models import BloodState
 from .. import db
@@ -68,7 +69,7 @@ def gather_blood_type_stats():
     
     return drops
 
-def process_title():
+def process_title(title):
     '''
     Helper method handling processing the title for news subsite:
     * lowercase whole text
@@ -76,3 +77,7 @@ def process_title():
     * replace whitespace with dashes
     * etc.
     '''
+    title_normalised = title.lower()
+    title_normalised = title_normalised.replace(' ', '-')
+    title_normalised = html.escape(title_normalised, quote=True)
+    return title_normalised
