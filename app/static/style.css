@@ -1,6 +1,8 @@
 /* NAVIGATION */
 body {
     margin: 0px;
+
+    font-family: 'Fira Sans', 'Liberation Sans', 'Arial', sans-serif, monospace;
     /* background-color: #dddddd; */
 }
 .patterns {
@@ -181,6 +183,7 @@ h1.centered {
 .profile-tile-info{
     text-align: right;
 
+    padding-left: 10px;
     padding-right: 10px;
     padding-top: 4px;
     padding-bottom: 4px;
@@ -198,6 +201,7 @@ h1.centered {
     text-align: left;
 
     padding-left: 10px;
+    padding-right: 10px;
     padding-top: 4px;
     padding-bottom: 4px;
 
@@ -318,6 +322,7 @@ div.droplet.qVL{
     text-align: left;
 
     padding-left: 10px;
+    padding-right: 10px;
     padding-top: 4px;
     padding-bottom: 4px;
 
@@ -358,5 +363,84 @@ p.news-paragraph{
     width: 500px;
 }
 
+.profile-view.branch-view h3{
+    margin: 10px;
+}
+
+.post-view{
+    width: 500px;
+
+    display: flex;
+    flex-direction: column;
+    flex-wrap: wrap;
+    justify-content: center;
+    align-items: stretch;
+    align-content: stretch;
+
+    background-color: rgba(255, 255, 255, 0.1);
+    backdrop-filter: blur(2px);
+
+    border-radius: 10px;
+    border: 2px solid;
+    border-color: #a1233e;
+    margin: 10px;
+}
+
+.post-view-table td:first-child, .post-view-table th:first-child {
+    text-align: right;
+
+    padding-left: 10px;
+    padding-right: 10px;
+    padding-top: 4px;
+    padding-bottom: 4px;
+
+    width: 75%;
+    background-color: rgba(255, 255, 255, 0.2);
+    /* backdrop-filter: blur(1px); */
+
+    border-radius: 10px 0px 0px 10px;
+    border: 2px solid;
+    border-color: rgba(0, 0, 0, 0.5);
+}
+
+.post-view-table td:last-child, .post-view-table th:last-child {
+    text-align: left;
+
+    padding-left: 10px;
+    padding-right: 10px;
+    padding-top: 4px;
+    padding-bottom: 4px;
+
+    width: 25%;
+    background-color: rgba(255, 255, 255, 0.5);
+
+    border-radius: 0px 10px 10px 0px;
+    border: 2px solid;
+    border-color: rgba(151, 151, 151, 0.5);
+}
+
+.create-post {
+    text-align: center;
+
+    align-self: center;
+
+    padding-left: 10px;
+    padding-right: 10px;
+    padding-top: 4px;
+    padding-bottom: 4px;
+
+    width: 70%;
+    background-color: rgba(255, 255, 255, 0.5);
+
+    border-radius: 10px;
+    border: 2px solid;
+    border-color: rgba(151, 151, 151, 0.5);
+}
+
 .news-details .news-header{
+}
+
+.comments hr{
+    width: 100%;
+    color: rgba(151, 151, 151, 0.5)
 }
