@@ -5,7 +5,7 @@ from .. import db
 from ..models import User, Session, PassResetSession
 
 from ..auth.helpers import server_set_session, server_check_session, SESSION_NAME, check_admin_session, check_session, get_supervisor_branch
-from ..auth.helpers import get_post, get_posts, create_post, update_post, delete_post, get_post_comments, add_comment
+from ..auth.helpers import get_post, get_posts_branch, create_post, update_post, delete_post, get_post_comments, add_comment
 from .helpers import *
 
 from ..auth.forms import CreatePostForm, EditPostForm, AddCommentForm
@@ -14,9 +14,13 @@ from ..auth.forms import CreatePostForm, EditPostForm, AddCommentForm
 @main.route('/', methods=['GET', 'POST'])
 def home():
     user_session, user_supervisor = check_session()
+    posts = get_all_posts()
     
     return render_template('main.html', 
-                           is_supervisor=user_supervisor, user_session=user_session, blood_list=gather_blood_type_stats())
+                           is_supervisor=user_supervisor, 
+                           user_session=user_session, 
+                           blood_list=gather_blood_type_stats(),
+                           post_list = posts)
 
 @main.route('/my_profile', methods=['GET', 'POST'])
 def my_profile():
@@ -59,14 +63,14 @@ def news_details(post_title=None):
     return render_template('news.html', post = post, comments = comments, form = form,
                             is_supervisor = user_supervisor, user_session = user_session)
     
-@main.route("/branch")
+@main.route("/my_branch")
 def branch_desc():
     user_session, user_supervisor = check_session()
     
     if user_supervisor:
         branch_data = get_supervisor_branch()
         print(branch_data)
-        posts = get_posts()
+        posts = get_posts_branch()
         return render_template('branch/branch-details.html', branch = branch_data, user_session = True, is_supervisor = user_supervisor, posts = posts)
     return redirect(url_for('main.home'))
 
@@ -97,11 +101,11 @@ def branch_edit_post(post_title):
         except:
             return redirect(url_for('main.branch_desc'))
         
-        if post.branch_id == branch_data.supervisor:
+        if post.branch_id == branch_data.id:
             form = EditPostForm(obj=post)
 
             if form.validate_on_submit():
-                update_post(branch_data.supervisor, post_title, form)
+                update_post(branch_data.id, post_title, form)
                 return redirect(url_for('main.branch_desc')) 
 
             return render_template('branch/create-post.html', branch=branch_data, form=form, is_supervisor = user_supervisor, user_session = user_session)

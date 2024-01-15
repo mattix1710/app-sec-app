@@ -58,8 +58,13 @@ CREATE TABLE "branch"(
     "id" SERIAL PRIMARY KEY,
     "supervisor" SERIAL REFERENCES users(id),
     "name" VARCHAR(255) UNIQUE NOT NULL,
-    "address" VARCHAR(255) UNIQUE NOT NULL
+    "address" VARCHAR(255) UNIQUE NOT NULL,
+
+    UNIQUE("supervisor")
 );
+
+-- eventually
+ALTER TABLE "branch" ADD UNIQUE ("supervisor");
 
 CREATE TABLE "post"(
     "id" SERIAL PRIMARY KEY,

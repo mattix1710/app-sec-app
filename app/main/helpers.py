@@ -6,7 +6,7 @@ from bs4 import BeautifulSoup
 import re
 import html
 
-from ..models import BloodState
+from ..models import BloodState, Post
 from .. import db
 
 @shared_task
@@ -81,3 +81,6 @@ def process_title(title):
     title_normalised = title_normalised.replace(' ', '-')
     title_normalised = html.escape(title_normalised, quote=True)
     return title_normalised
+
+def get_all_posts():
+    return Post.query.all()

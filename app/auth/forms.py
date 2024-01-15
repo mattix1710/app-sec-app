@@ -64,9 +64,9 @@ class CreatePostForm(FlaskForm):
     submit = SubmitField('Save post')
 
     def validate_title(self, field):
-        title_normalised = process_title(field.data)
+        title_normalized = process_title(field.data)
         print(process_title(field.data))
-        if Post.query.where(Post.title_normalized == title_normalised).count() > 0:
+        if Post.query.where(Post.title_normalized == title_normalized).count() > 0:
             raise ValidationError('Post Exists')
 
 
@@ -74,16 +74,15 @@ class EditPostForm(FlaskForm):
     title = TextAreaField('Title', validators=[DataRequired()])
     content = TextAreaField('Content', render_kw={"rows": 40, "cols": 100}, validators=[DataRequired()])
 
-    submit = SubmitField('Save post')
+    submit = SubmitField('Update post')
 
     def validate_title(self, field):
-        title_normalised = process_title(field.data)
+        title_normalized = process_title(field.data)
         print(process_title(field.data))
-        if Post.query.where(Post.title_normalized == title_normalised).count() > 1:
-            raise ValidationError('Post Exists')
+        if Post.query.where(Post.title_normalized == title_normalized).count() > 1:
+            raise ValidationError('Title normalized duplicated!')
 
 
 class AddCommentForm(FlaskForm):
-    content = TextAreaField('Comment body', render_kw={"rows": 4, "cols": 50}, validators=[DataRequired()])
-
-    submit = SubmitField('Post comment')
+    content = TextAreaField('Add your thoughts...', render_kw={"rows": 8, "cols": 70}, validators=[DataRequired()])
+    submit = SubmitField('Add comment')

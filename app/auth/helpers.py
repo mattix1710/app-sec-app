@@ -25,7 +25,7 @@ def hash_the_pass(passwd):
 
 #############################################
 # TIME DELTA SECONDS
-DELTA_SECS = 3600
+DELTA_SECS = 100000
 ADMIN_DELTA_SECS = 300
 SESSION_NAME = 'session_data'
 SESSION_TOKEN = 'save_my_bandwidth'     # TODO: change and move to env variables
@@ -264,12 +264,12 @@ def get_post(title):
     post = Post.query.where(Post.id == Post.query.where(Post.title_normalized == title).scalar().id).scalar()
     return post
 
-def get_posts():
+def get_posts_branch():
     if SESSION_NAME in session:
         session_id = session[SESSION_NAME]['id']
-        posts = Post.query.where(Post.branch_id == Session.query.where(Session.id == session_id).scalar().uid)
+        posts = Post.query.where(Post.branch_id == get_supervisor_branch().id)
         return posts
-    return []
+    return False
 
 def get_post_comments(title):
     comments = Comment.query.where(Comment.post_id == Post.query.where(Post.title_normalized == title).scalar().id)
@@ -288,18 +288,17 @@ def add_comment(title, form):
 def create_post(title, content):
     if SESSION_NAME in session:
         session_id = session[SESSION_NAME]['id']
-        post = Post(branch_id = Session.query.where(Session.id == session_id).scalar().uid,
+        post = Post(branch_id = get_supervisor_branch().id,
                     title = title,
                     title_normalized = process_title(title),
                     content = content)
         db.session.add(post)
         db.session.commit()
 
-def update_post(supervisor, old_title, form):
+def update_post(branch_id, old_title_norm, form):
     if SESSION_NAME in session:
         session_id = session[SESSION_NAME]['id']
-        title_normalised = process_title(old_title)
-        post = Post.query.where(Post.branch_id == supervisor and Post.title_normalized == title_normalised).scalar()
+        post = Post.query.where(Post.branch_id == branch_id and Post.title_normalized == old_title_norm).scalar()
         post.title = form.title.data
         post.title_normalized = process_title(form.title.data)
         post.content = form.content.data
