@@ -7,21 +7,27 @@
 {% block content %}
 
 <div class="center-content">
-    <div class="news-content">
-        <h3>{{ post.title }}</h3>
-        <div class="news-details">{{ post.content }}</div>
-    </div>
-    <div class="news-content">
-        <h3>Comments:</h3>
-        {% for comment in comments %}
-        <p>
-            <!-- <b>{{ comment.author_id }}:</b> <br> -->
-            {{ comment.content }}
-        </p>
-        {% endfor %}
-    </div>
+    <section class="news profile-view">
+        <div class="news-content">
+            <h3>{{ post.title }}</h3>
+            <div class="news-details">{{ post.content }}</div>
+        </div>
+        <div class="news-content comments">
+            
+                <h3 class="news-details news-header">Comments:</h3>
+                <div class="news-details comments">
+                {% for comment in comments %}
+                <p>
+                    {{ comment.content }}
+                </p>
+                {% endfor %}
+            </div>
+        </div>
+    </section>
     {% if user_session %}
     {{ wtf.quick_form(form) }}
+    {% else %}
+    Log-in to add comment
     {% endif %}
 </div>
 

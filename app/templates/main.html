@@ -21,19 +21,18 @@
                 <img src="../static/little_blood.png" alt="droplet" style="width: 100px;">
             </div>
         </div>
+        {% for post in post_list %}
         <div class="news-content">
             <div class="news-details">
-                <h1>Wonderful stats in new year!</h1>
+                <h1>{{ post.title }}</h1>
                 <p class="news-paragraph">
-                    Lorem ipsum dolor sit amet, consectetur adipiscing elit. Vivamus dictum ullamcorper nisl et convallis. Nullam porttitor egestas fermentum. Aliquam tempor mi vel quam semper, vitae fermentum nunc maximus. Nunc fermentum ex dui, a tempor dui elementum quis. Nullam sollicitudin orci non gravida volutpat. Lorem ipsum dolor sit amet, consectetur adipiscing elit. Donec eget scelerisque turpis, et ornare diam.
-
-Interdum et malesuada fames ac ante ipsum primis in faucibus. Donec varius, dui at pulvinar elementum, dolor eros dignissim lectus, et semper odio ante non nunc. Aliquam semper sagittis turpis, et congue elit consequat vel. Sed nec sapien sit amet arcu convallis.
+                    {{ post.content }}
                 </p>
-                <form method="POST" action="">
+                <a href="{{ url_for('main.news_details', post_title=post.title_normalized) }}">
                     <button type="submit" value="details" name="read_more" class="button-news-details">Read more</button>
-                </form>
-            </div>
+                </a>
         </div>
+        {% endfor %}
     </section>
 </div>
 

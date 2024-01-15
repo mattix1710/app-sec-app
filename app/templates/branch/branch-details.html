@@ -23,6 +23,7 @@
     <!-- TODO: add new post creator & post viewer/editor -->
     <a href="{{ url_for('main.branch_create_post') }}">Create New Post</a>
 
+    {% if posts %}
     <table class="post-view">
         <tr>
             <th>Title</th>
@@ -38,6 +39,7 @@
         </tr>
         {% endfor %}
     </table>
+    {% endif %}
 </div>
 
 {% endblock %}
