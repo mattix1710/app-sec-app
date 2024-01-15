@@ -272,9 +272,10 @@ def get_posts_branch():
     return False
 
 def get_post_comments(title):
-    comments = Comment.query.where(Comment.post_id == Post.query.where(Post.title_normalized == title).scalar().id)
-    # comments.join(User, User.id == Comment.author_id)
-    return comments
+    comments_authors = db.session.query(Comment.id, Comment.post_id, User.username, Comment.content).join(Comment, Comment.author_id == User.id).all()
+    
+    # comments = Comment.query.where(Comment.post_id == Post.query.where(Post.title_normalized == title).scalar().id)
+    return comments_authors
 
 def add_comment(title, form):
     if SESSION_NAME in session:

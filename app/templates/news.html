@@ -18,8 +18,11 @@
                 <div class="news-details comments">
                 {% for comment in comments %}
                 <p>
-                    {{ comment.content }}
+                    <b>{{ comment.content }}</b>
                 </p>
+                <hr>
+                by {{ comment.username }}
+                <br><br>
                 {% endfor %}
             </div>
         </div>
