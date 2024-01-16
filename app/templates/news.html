@@ -16,6 +16,7 @@
             
             <h3 class="news-details news-header">Comments:</h3>
             <div class="news-details comments">
+            {% if comments %}
             {% for comment in comments %}
                 <div class="comment-alone">
                 <p>
@@ -25,6 +26,9 @@
                 <p class="author">By: <b>{{ comment.username }}</b></p>
                 </div>
             {% endfor %}
+            {% else %}
+            <p>There are no comments yet!</p>
+            {% endif %}
             </div>
         </div>
     </section>

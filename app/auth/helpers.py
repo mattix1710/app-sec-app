@@ -271,8 +271,8 @@ def get_posts_branch():
         return posts
     return False
 
-def get_post_comments(title):
-    comments_authors = db.session.query(Comment.id, Comment.post_id, User.username, Comment.content).join(Comment, Comment.author_id == User.id).all()
+def get_post_comments(post_id):
+    comments_authors = db.session.query(Comment.id, Comment.post_id, User.username, Comment.content).join(Comment, Comment.author_id == User.id).filter(Comment.post_id == post_id).all()
     
     # comments = Comment.query.where(Comment.post_id == Post.query.where(Post.title_normalized == title).scalar().id)
     return comments_authors

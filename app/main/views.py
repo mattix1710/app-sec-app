@@ -51,7 +51,7 @@ def news_details(post_title=None):
     user_session, user_supervisor = check_session()
     try:    
         post = get_post(post_title)
-        comments = get_post_comments(post_title)
+        comments = get_post_comments(post.id)
     except:
         return redirect(url_for('main.home'))
     form = AddCommentForm()
