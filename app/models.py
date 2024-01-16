@@ -11,7 +11,7 @@ class User(db.Model):
     email = db.Column(db.String(255), nullable=False, unique=True)
     password = db.Column(db.String(72), nullable=False)
     is_active = db.Column(db.Boolean, nullable=False)
-    is_supervisor = db.Column(db.Boolean, server_default=db.FetchedValue())
+    is_supervisor = db.Column(db.Boolean, nullable=False, server_default=db.FetchedValue())
     is_admin = db.Column(db.Boolean, nullable=False, server_default=db.FetchedValue())
     last_logged = db.Column(db.Date, nullable=False, server_default=db.FetchedValue())
 
@@ -26,7 +26,7 @@ class Session(db.Model):
     __tablename__ = 'sessions'
 
     id = db.Column(db.Uuid, primary_key=True, server_default=db.FetchedValue())
-    uid = db.Column(db.ForeignKey('users.id'), nullable=False, server_default=db.FetchedValue())
+    uid = db.Column(db.ForeignKey('users.id', ondelete='CASCADE'), nullable=False, server_default=db.FetchedValue())
     timestamp = db.Column(db.DateTime, nullable=False, server_default=db.FetchedValue())
 
     user = db.relationship('User', primaryjoin='Session.uid == User.id', backref='sessions')
@@ -91,3 +91,24 @@ class Comment(db.Model):
 
     author = db.relationship('User', primaryjoin='Comment.author_id == User.id', backref='comments')
     post = db.relationship('Post', primaryjoin='Comment.post_id == Post.id', backref='comments')
+    
+class UserGivingDate(db.Model):
+    __tablename__ = 'user_giving_dates'
+
+    id = db.Column(db.Integer, primary_key=True, server_default=db.FetchedValue())
+    user_id = db.Column(db.ForeignKey('users.id'), nullable=False, server_default=db.FetchedValue())
+    date = db.Column(db.Date, nullable=False)
+    amount = db.Column(db.Numeric, nullable=False)
+    location = db.Column(db.ForeignKey('branch.id'), nullable=False, server_default=db.FetchedValue())
+
+    branch = db.relationship('Branch', primaryjoin='UserGivingDate.location == Branch.id', backref='user_giving_dates')
+    user = db.relationship('User', primaryjoin='UserGivingDate.user_id == User.id', backref='user_giving_dates')
+    
+class UserPersonalDatum(User):
+    __tablename__ = 'user_personal_data'
+
+    user_id = db.Column(db.ForeignKey('users.id'), primary_key=True, server_default=db.FetchedValue())
+    PESEL = db.Column(db.String(11), unique=True)
+    first_name = db.Column(db.String(100))
+    last_name = db.Column(db.String(100))
+    blood_type = db.Column(db.String(5))

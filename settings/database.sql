@@ -1,3 +1,6 @@
+-- extension used for uuid_generate_v4()
+CREATE EXTENSION "uuid-ossp";
+
 CREATE TABLE "users"(
     "id" SERIAL PRIMARY KEY,
     "username" VARCHAR(100) NOT NULL,
@@ -12,7 +15,30 @@ CREATE TABLE "users"(
     UNIQUE("email")
 );
 
-CREATE EXTENSION "uuid-ossp";
+CREATE TABLE "user_personal_data"(
+    "user_id" SERIAL PRIMARY KEY REFERENCES users(id),
+    "PESEL" CHAR(11) UNIQUE,
+    "first_name" VARCHAR(100),
+    "last_name" VARCHAR(100),
+    "blood_type" VARCHAR(5)
+);
+
+CREATE TABLE "branch"(
+    "id" SERIAL PRIMARY KEY,
+    "supervisor" SERIAL REFERENCES users(id),
+    "name" VARCHAR(255) UNIQUE NOT NULL,
+    "address" VARCHAR(255) UNIQUE NOT NULL,
+
+    UNIQUE("supervisor")
+);
+
+CREATE TABLE "user_giving_dates"(
+    "id" SERIAL PRIMARY KEY,
+    "user_id" SERIAL REFERENCES users(id) NOT NULL,
+    "date" DATE             NOT NULL,
+    "amount" DECIMAL        NOT NULL,
+    "location" SERIAL       REFERENCES branch(id)
+);
 
 CREATE TABLE "sessions"(
     "id" uuid DEFAULT uuid_generate_v4() PRIMARY KEY,
@@ -37,20 +63,6 @@ CREATE TABLE "blood_state"(
 
     UNIQUE("blood_type")
 );
-
--- NOT INSERTED YET
-
-CREATE TABLE "branch"(
-    "id" SERIAL PRIMARY KEY,
-    "supervisor" SERIAL REFERENCES users(id),
-    "name" VARCHAR(255) UNIQUE NOT NULL,
-    "address" VARCHAR(255) UNIQUE NOT NULL,
-
-    UNIQUE("supervisor")
-);
-
--- eventually
-ALTER TABLE "branch" ADD UNIQUE ("supervisor");
 
 CREATE TABLE "post"(
     "id" SERIAL PRIMARY KEY,
