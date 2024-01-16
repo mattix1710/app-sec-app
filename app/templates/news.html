@@ -9,28 +9,31 @@
 <div class="center-content">
     <section class="news profile-view">
         <div class="news-content">
-            <h3>{{ post.title }}</h3>
+            <h2>{{ post.title }}</h2>
             <div class="news-details">{{ post.content }}</div>
         </div>
         <div class="news-content comments">
             
-                <h3 class="news-details news-header">Comments:</h3>
-                <div class="news-details comments">
-                {% for comment in comments %}
+            <h3 class="news-details news-header">Comments:</h3>
+            <div class="news-details comments">
+            {% for comment in comments %}
+                <div class="comment-alone">
                 <p>
                     {{ comment.content }}
                 </p>
                 <hr>
-                <p>By: <b>{{ comment.username }}</b></p>
-                <br>
-                {% endfor %}
+                <p class="author">By: <b>{{ comment.username }}</b></p>
+                </div>
+            {% endfor %}
             </div>
         </div>
     </section>
     {% if user_session %}
     {{ wtf.quick_form(form) }}
     {% else %}
-    Log-in to add comments
+    <section class="news profile-view">
+    <p class="replacement-info">Log-in to add comments<p>
+    </section>
     {% endif %}
 </div>
 
