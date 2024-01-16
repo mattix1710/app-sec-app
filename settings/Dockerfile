@@ -1,4 +1,4 @@
-FROM postgres:latest
+FROM postgres:11.22-bullseye
 
 ADD ./database.sql /docker-entrypoint-initdb.d
 ADD ./insertion.dml.sql /docker-entrypoint-initdb.d
