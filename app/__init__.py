@@ -5,7 +5,7 @@ from flask_mail import Mail
 import os
 # from flask_sslify import SSLify
 
-from . import setEnv
+# from . import setEnv
 from .async_celery import celery as celery_config
 
 db = SQLAlchemy()
@@ -14,7 +14,7 @@ mail_service = Mail()
 DB_USER = 'postgres'
 DB_PASS = 'superduperpass'
 
-DB_CONN = 'localhost:5432'
+DB_CONN = 'postgres:5432'
 DB_NAME = 'droplet_db'
 
 DB_URL = 'postgresql+psycopg://{user}:{passwd}@{url}/{db}'.format(user=DB_USER, passwd=DB_PASS, url=DB_CONN, db=DB_NAME)

@@ -1,0 +1,48 @@
+services:
+  app:
+    build:
+      context: "."
+    env_file:
+      - .env
+    ports:
+      - "127.0.0.1:5000:5000"
+    environment:
+      MAIL_ADDRESS: ${MAIL_ADDRESS}
+      MAIL_PASSWORD: ${MAIL_PASSWORD}
+      MAIL_SERVER: ${MAIL_SERVER}
+      MAIL_PORT: ${MAIL_PORT}
+    depends_on:
+      - redis
+    
+  celery:
+    build:
+      context: "."
+    command: celery -A website_app worker -l info -P gevent
+    env_file:
+      - .env
+    environment:
+      REDIS_SERVER: "redis://redis:6379"
+    depends_on:
+      - redis
+
+  redis:
+    image: redis:latest
+    expose:
+      - "6379"
+    volumes:
+      - "redis:/data"
+
+  postgres:
+    build:
+      context: "./settings"
+    volumes:
+      - postgres-data:/var/lib/postgresql/data/
+    ports:
+      - 127.0.0.1:5432:5432
+    environment:
+      POSTGRES_PASSWORD: superduperpass
+      POSTGRES_DB: droplet_db
+
+volumes:
+  redis: {}
+  postgres-data: {}

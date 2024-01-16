@@ -130,6 +130,22 @@ Whole project is based on Python and Postgres database.
 🚧🚧🚧
 > TODO: Installation description
 
+1. Clone this repository and move to the project directory
+2. Rename `template.env` to `.env` and add your data (ex: `mv template.env .env`)
+    - MAIL_ADDRESS -- The email that will send password reset tokens
+    - MAIL_PASSWORD -- The password for the email account
+    - MAIL_SERVER -- The SMTP server address
+    - MAIL_PORT -- The SMTP server port
+3. Build the Docker Compose images
+```
+docker compose up --build
+```
+4. Access the server on `localhost:5000`.
+
+You can terminate the application via the command line. After that you'll need to run `docker compose down`.
+
+To restart the application you can run `docker compose up` without the **build** parameter.
+
 #### Dockering Postgres
 
 1. After installing [Docker Desktop](https://www.docker.com/get-started/) (e.g. on Windows) it is possible to run the app in the terminal:
