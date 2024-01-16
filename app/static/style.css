@@ -333,13 +333,9 @@ div.droplet.qVL{
     border-color: rgba(151, 151, 151, 0.5);
 }
 
-/* .news-details{
-    width: 90%;
-
-    border: solid;
-    border-width: 2px;
-    border-color: orange;
-} */
+.news-details.news-text{
+    white-space: pre-line;
+}
 
 p.news-paragraph{
     overflow: hidden;
