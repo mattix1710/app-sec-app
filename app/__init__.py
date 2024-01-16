@@ -1,9 +1,7 @@
 from flask import Flask
 from flask_sqlalchemy import SQLAlchemy
-from flask import session
 from flask_bootstrap import Bootstrap
 from flask_mail import Mail
-from flask_wtf.csrf import CSRFProtect
 import os
 # from flask_sslify import SSLify
 
@@ -12,7 +10,6 @@ from .async_celery import celery as celery_config
 
 db = SQLAlchemy()
 mail_service = Mail()
-csrf = CSRFProtect()
 
 DB_USER = 'postgres'
 DB_PASS = 'superduperpass'
@@ -38,12 +35,8 @@ def create_app():
     # https://flask.palletsprojects.com/en/2.3.x/config/#PERMANENT_SESSION_LIFETIME
     app.config['PERMANENT_SESSION_LIFETIME'] = 3600
     
-    
     # Flask secret key - used for signing session cookies against cookie data tampering
     app.secret_key = 'verysecretsecretkey'.encode('utf-8')
-
-    # Adding CSRF protection for forms
-    csrf.init_app(app)
 
     # initializing database in the app
     db.init_app(app)
