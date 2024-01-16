@@ -470,3 +470,8 @@ p.news-paragraph{
     font-size: x-large;
     font-weight: bold;
 }
+
+p.comment{
+    white-space: pre-line;
+    margin-block: 0px;
+}

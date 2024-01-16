@@ -19,9 +19,7 @@
             {% if comments %}
             {% for comment in comments %}
                 <div class="comment-alone">
-                <p>
-                    {{ comment.content }}
-                </p>
+                <p class="comment">{{ comment.content }}</p>
                 <hr>
                 <p class="author">By: <b>{{ comment.username }}</b></p>
                 </div>
