@@ -148,6 +148,7 @@ def check_admin_privileges(username):
         print("AUTH_ERR: MultipleResultsFound")
         return False
 
+@shared_task
 def send_password_reset_email(email):
     try:
         entry = User.query.filter_by(email=email).scalar()
