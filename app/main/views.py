@@ -125,8 +125,3 @@ def branch_delete_post(post_title):
             return redirect(url_for('main.branch_desc'))
         return redirect(url_for('main.branch_desc'))
     return redirect(url_for('main.home'))
-
-@main.route('/temp')
-def tester():
-    print("PROCESSED:", process_title("<podus zkowiec>@@=heelo!!!ęążźć.pff"))
-    return "Hello"
