@@ -180,8 +180,9 @@ def send_password_reset_email(email):
     except exc.NoResultFound:
         # INFO: for further development - if this exception occurs, it means the user typed wrong e-mail address
         print("DEBUG: e-mail not sent: No results found!")
-    except:
+    except Exception as e:
         print("DEBUG: Noooooo, God please, no!")
+        print("EXCEPTION:", e)
     
 def __generate_reset_token(in_bytes = False):
     '''

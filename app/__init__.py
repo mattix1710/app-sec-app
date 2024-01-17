@@ -14,6 +14,7 @@ mail_service = Mail()
 DB_USER = 'postgres'
 DB_PASS = 'superduperpass'
 
+# DB_CONN = 'localhost:5432'
 DB_CONN = 'postgres:5432'
 DB_NAME = 'droplet_db'
 
@@ -42,6 +43,7 @@ def create_app():
     db.init_app(app)
 
     # Initialize mail server
+    app.config['SERVER_NAME'] = '127.0.0.1:5000'
     app.config['MAIL_SERVER'] = os.environ.get('MAIL_SERVER')
     app.config['MAIL_PORT'] = os.environ.get('MAIL_PORT')
     app.config['MAIL_USERNAME'] = os.environ.get('MAIL_ADDRESS')
