@@ -21,7 +21,7 @@ services:
     env_file:
       - .env
     environment:
-      REDIS_SERVER: "redis://redis:6379"
+      REDIS_SERVER: ${REDIS_SERVER}
     depends_on:
       - redis
 
