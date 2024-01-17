@@ -2,6 +2,8 @@ services:
   app:
     build:
       context: "."
+    volumes:
+      - app_files:/app
     env_file:
       - .env
     ports:
@@ -18,6 +20,8 @@ services:
     build:
       context: "."
     command: celery -A website_app worker -l info -P gevent
+    volumes:
+      - app_files:/app
     env_file:
       - .env
     environment:
@@ -46,3 +50,4 @@ services:
 volumes:
   redis: {}
   postgres-data: {}
+  app_files: {}
