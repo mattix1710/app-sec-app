@@ -3,7 +3,6 @@ from flask_mail import Message
 from sqlalchemy import exc
 import bcrypt
 from datetime import datetime, timedelta
-import functools
 from Crypto import Random
 import base64
 import os

@@ -1,12 +1,10 @@
-from flask import Flask, session, redirect, url_for, request, render_template
-import cgi
-import re
+from flask import session, redirect, url_for, request, render_template
 import os
 
 from . import auth
 
 from .forms import RegistrationForm, LoginForm, ForgotPasswordForm, ResetPasswordForm
-from ..models import User, Session
+from ..models import User
 from .. import db
 
 from .helpers import hash_the_pass, server_check_session, server_set_session, SESSION_NAME, send_password_reset_email, validate_token, user_pass_update, check_admin_session, check_admin_privileges

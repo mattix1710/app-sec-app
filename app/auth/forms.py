@@ -1,5 +1,5 @@
 from flask_wtf import FlaskForm
-from wtforms import StringField, PasswordField, SubmitField, TextAreaField
+from wtforms import StringField, PasswordField, SubmitField, TextAreaField, EmailField
 from wtforms.validators import DataRequired, Length, Email, Regexp, EqualTo
 from wtforms import ValidationError
 import bcrypt
@@ -8,9 +8,9 @@ from ..models import User, Post
 from ..main.helpers import process_title
 
 class RegistrationForm(FlaskForm):
-    email = StringField('e-mail', validators=[DataRequired(), Length(1, 100), Email()])
+    email = EmailField('e-mail', validators=[DataRequired(), Length(5, 100), Email()])#, Regexp(r'^[a-zA-Z][a-zA-Z0-9\.\-_]*@[a-zA-Z\.\-]*$')])
     
-    username = StringField('Username', validators=[DataRequired(), Length(1, 50), Regexp('^[A-Za-z]\\w*$')])
+    username = StringField('Username', validators=[DataRequired(), Length(3, 50), Regexp(r'^[A-Za-z]\w*$')])
     
     password = PasswordField('Password', validators=[DataRequired(), Length(min=8, message="Password too short."), EqualTo('password2', message='Passwords must match.')])
     password2 = PasswordField('Confirm password', validators=[DataRequired()])
@@ -45,7 +45,7 @@ class LoginForm(FlaskForm):
 
 
 class ForgotPasswordForm(FlaskForm):
-    email = StringField('e-mail', validators=[DataRequired(), Length(1, 100), Email()])
+    email = EmailField('e-mail', validators=[DataRequired(), Length(1, 100), Email()])
 
     submit = SubmitField('Confirm')
 

@@ -1,10 +1,9 @@
 from flask import render_template, redirect, url_for, request, session
 from . import main
 
-from .. import db
 from ..models import User, Session, PassResetSession
 
-from ..auth.helpers import server_set_session, server_check_session, SESSION_NAME, check_admin_session, check_session, get_supervisor_branch
+from ..auth.helpers import SESSION_NAME, check_admin_session, check_session, get_supervisor_branch
 from ..auth.helpers import get_post, get_posts_branch, create_post, update_post, delete_post, get_post_comments, add_comment
 from .helpers import *
 
@@ -126,3 +125,8 @@ def branch_delete_post(post_title):
             return redirect(url_for('main.branch_desc'))
         return redirect(url_for('main.branch_desc'))
     return redirect(url_for('main.home'))
+
+@main.route('/temp')
+def tester():
+    print("PROCESSED:", process_title("<podus zkowiec>@@=heelo!!!ęążźć.pff"))
+    return "Hello"

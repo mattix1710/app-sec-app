@@ -4,7 +4,7 @@ from celery import shared_task
 import urllib3
 from bs4 import BeautifulSoup
 import re
-import html
+import unicodedata
 
 from ..models import BloodState, Post
 from .. import db
@@ -77,10 +77,12 @@ def process_title(title):
     * replace whitespace with dashes
     * etc.
     '''
-    title_normalised = title.lower()
-    title_normalised = title_normalised.replace(' ', '-')
-    title_normalised = html.escape(title_normalised, quote=True)
-    return title_normalised
+    title_normalized = title.lower()
+    title_normalized = re.sub(r'(\s|\_|=)', '-', title_normalized)
+    title_normalized = ''.join(c for c in unicodedata.normalize('NFD', title_normalized)
+                   if unicodedata.category(c) != 'Mn')
+    title_normalized = re.sub(r'[^a-zA-Z0-9\-]', '', title_normalized)
+    return title_normalized
 
 def get_all_posts():
     return Post.query.all()
