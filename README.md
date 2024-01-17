@@ -109,6 +109,7 @@ Whole project is based on Python and Postgres database.
 | email-validator      | 2.1.0.post1   |
 | bcrypt               | 4.0.1         |
 | pycryptodome         | 3.19.0        |
+| Unidecode            | 1.3.8         |
 | celery               | 5.3.6         |
 | gevent               | 23.9.1        |
 | redis                | 5.0.1         |
