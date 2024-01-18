@@ -39,24 +39,18 @@
 <!-- TABLE OF CONTENTS -->
 <details>
   <summary>Table of Contents</summary>
-  <ol>
-    <li>
-      <a href="#about-the-project">About The Project</a>
-      <ul>
-        <li><a href="#built-with">Built With</a></li>
-      </ul>
-    </li>
-    <li>
-      <a href="#getting-started">Getting Started</a>
-      <ul>
-        <li><a href="#prerequisites">Prerequisites</a></li>
-        <li><a href="#installation">Installation</a></li>
-      </ul>
-    </li>
-    <li><a href="#roadmap">Roadmap</a></li>
-    <li><a href="#license">License</a></li>
-    <li><a href="#acknowledgments">Acknowledgments</a></li>
-  </ol>
+
+- [About The Project](#about-the-project)
+  - [Built With](#built-with)
+- [Getting Started](#getting-started)
+  - [Prerequisites](#prerequisites)
+  - [Installation](#installation)
+    - [Docker installation](#docker-installation)
+    - [DEVELOPMENT - Dockering Postgres](#development---dockering-postgres)
+  - [Starting the app](#starting-the-app)
+- [Roadmap](#roadmap)
+- [License](#license)
+- [Acknowledgments](#acknowledgments)
 </details>
 
 
@@ -113,6 +107,7 @@ Whole project is based on Python and Postgres database.
 | celery               | 5.3.6         |
 | gevent               | 23.9.1        |
 | redis                | 5.0.1         |
+| gunicorn             | 21.2.0        |
 
 </center>
 
@@ -128,9 +123,9 @@ Whole project is based on Python and Postgres database.
 
 ### Installation
 
-🚧🚧🚧
-> TODO: Installation description
+For the easiness - we have created *docker compose script* that handles all the dependecies, creates neeeded containers and runs whole application.
 
+#### Docker installation
 1. Clone this repository and move to the project directory
 2. Rename `template.env` to `.env` and add your data (ex: `mv template.env .env`)
     - MAIL_ADDRESS -- The email that will send password reset tokens
@@ -143,11 +138,12 @@ docker compose up --build
 ```
 4. Access the server on `localhost:5000`.
 
-You can terminate the application via the command line. After that you'll need to run `docker compose down`.
+!!. You can terminate the application via the command line. After that you'll need to run `docker compose down`.
 
-To restart the application you can run `docker compose up` without the **build** parameter.
+!!. To restart the application you can run `docker compose up` without the **build** parameter.
 
-#### Dockering Postgres
+---
+#### DEVELOPMENT - Dockering Postgres
 
 1. After installing [Docker Desktop](https://www.docker.com/get-started/) (e.g. on Windows) it is possible to run the app in the terminal:
 ```
