@@ -1,6 +1,4 @@
-import time
 from datetime import datetime, timedelta
-from celery import shared_task
 import urllib3
 from bs4 import BeautifulSoup
 import re
@@ -9,24 +7,6 @@ import unicodedata
 from ..models import BloodState, Post
 from .. import db
 
-@shared_task
-def really_long_wait():
-    print("START SLEEP")
-    time.sleep(5.0)
-    print("STOP SLEEP")
-
-DROPS = {
-    0: '0 Rh +',
-    1: '0 Rh -',
-    2: 'A Rh +',
-    3: 'A Rh -',
-    4: 'B Rh +',
-    5: 'B Rh -',
-    6: 'AB Rh +',
-    7: 'AB Rh -'
-}
-
-# TODO: add async (?)
 # TODO: add check in database (gather the data only once in a day - for data sync, and then store in database)
 def gather_blood_type_stats():
     
