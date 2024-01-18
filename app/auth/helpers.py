@@ -29,8 +29,7 @@ ADMIN_DELTA_SECS = 300
 SESSION_NAME = 'session_data'
 SESSION_TOKEN = 'save_my_bandwidth'     # TODO: change and move to env variables
 TOKEN_EXPIRATION = 15*60
-# SERVER_IP = "http://127.0.0.1:5000"
-SERVER_IP = "https://hack-me-daddy.pmhl.tech"
+SERVER_IP = "http://127.0.0.1:5000"
 
 def check_session(admin_check = False):
     '''
