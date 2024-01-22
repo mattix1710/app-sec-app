@@ -305,7 +305,7 @@ def update_post(branch_id, old_title_norm, form):
         post.content = form.content.data
         db.session.commit()
 
-def delete_post(post):
+def delete_post(post: Post):
     if SESSION_NAME in session:
-        db.session.delete(post)
+        Post.query.where(Post.title_normalized == post.title_normalized).delete()
         db.session.commit()
