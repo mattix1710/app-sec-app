@@ -24,7 +24,7 @@ def hash_the_pass(passwd):
 
 #############################################
 # TIME DELTA SECONDS
-DELTA_SECS = 100000
+DELTA_SECS = 7200
 ADMIN_DELTA_SECS = 300
 SESSION_NAME = 'session_data'
 SESSION_TOKEN = 'save_my_bandwidth'     # TODO: change and move to env variables
